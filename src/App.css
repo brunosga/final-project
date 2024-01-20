@@ -1,0 +1,68 @@
+.App {
+  text-align: center; /* Center align the content */
+  font-family: Arial, sans-serif; /* Example font */
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 300px; /* Adds spacing between header and grid */
+}
+
+header div, header input, header button {
+  margin: 0 10px;
+}
+
+/* Search bar style */
+input[type="search"] {
+  padding: 10px;
+  width: 300px; /* Set the width of the search bar */
+}
+
+.cuisine-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* Creates three columns */
+  gap: 20px;
+  padding: 20px 300px; 
+  margin-top: 20px; /* Adds spacing between header and grid */
+}
+
+.cuisine-card {
+  border: 1px solid #ccc;
+  padding: 20px;
+  border-radius: 10px; /* Rounds the corners of the cuisine card */
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Adds subtle shadow */
+}
+
+.cuisine-image {
+  width: 100%;
+  height: 150px; /* Adjust height as needed */
+  background-color: #f3f3f3; /* Placeholder for actual images */
+  margin-bottom: 20px; /* Adds spacing between the image and the text */
+}
+
+button {
+  padding: 10px 20px;
+  background-color: #000; /* Example button color */
+  color: #fff; /* Text color for buttons */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #444; /* Darken button on hover */
+}
+
+@media screen and (max-width: 768px) {
+  .cuisine-grid {
+    grid-template-columns: 1fr 1fr; /* Two columns for tablet */
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .cuisine-grid {
+    grid-template-columns: 1fr; /* Single column for mobile */
+  }
+}
