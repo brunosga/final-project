@@ -1,77 +1,49 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Header from './Header';
+import Menu from './Menu';
+import CuisineList from './CuisineList';
+import CuisineDetail from './CuisineDetail'; // Assume this is a new component for cuisine details
 import './App.css';
 
-const cuisines = [
-  { name: 'Vegetarian', id: 'vegetarian' },
-  { name: 'Japanese', id: 'japanese' },
-  { name: 'Mediterranean', id: 'mediterranean' },
-  { name: 'Italian', id: 'italian' },
-  { name: 'Tapas', id: 'tapas' },
-  { name: 'Asian', id: 'asian' },
-  { name: 'French', id: 'french' },
-  { name: 'Brazilian', id: 'brazilian' },
-  { name: 'Portuguese', id: 'portuguese' }
-];
+const App = () => {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [cuisines, setCuisines] = useState([]);
 
-function App() {
+  const toggleMenu = () => setMenuOpen(!menuOpen);
+  const closeMenu = () => setMenuOpen(false);
 
-  const handleCuisineClick = (cuisineId) => {
-    // Implement navigation to the specific cuisine page
-  };
-  
-  const [menuOpen, setMenuOpen] = React.useState(false);
-
-  const toggleMenu = () => {
-    setMenuOpen(!menuOpen);
-  };
-
-  const closeMenu = () => {
-    setMenuOpen(false);
-  };
-
+  useEffect(() => {
+    // The URL here should point to your actual Postman mock server endpoint
+    fetch('https://f805bb92-ed78-4c1e-a834-9e920d5d6f83.mock.pstmn.io/cuisine-card')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        // Assuming 'data' is an array of cuisines, we set it to state
+        setCuisines(data);
+      })
+      .catch(error => {
+        console.error('Error fetching data:', error);
+      });
+  }, []);
 
   return (
-    <div className="App">
-      <header>
-        <div className="logo">
-          <img src="/logo.png" alt="Logo" />
-        </div>
-        <input type="search" placeholder="Search bar" />
-        <div className="hamburger-icon" onClick={toggleMenu}>
-          &#9776; {/* Unicode for hamburger icon */}
-        </div>
-      </header>
-      
-      {menuOpen && (
-        <div className="backdrop" onClick={closeMenu}>
-          <div className="menu" onClick={e => e.stopPropagation()}>
-            <div className="close-icon" onClick={closeMenu}>&times;</div>
-            <a href="/messages">messages</a>
-            <a href="/profile">my profile</a>
-            <a href="/settings">settings</a>
-            <a href="/logout">log out</a>
-            <a href="/about">about</a>
-            <div className="menu-footer">
-              <div className="logo">LOGO</div>
-              <a href="/privacy">Privacy & Legal</a>
-            </div>
-          </div>
-        </div>
-      )}
-
-      <main>
-        <h2>Popular cuisines</h2>
-        <section className="cuisine-grid">
-          {cuisines.map((cuisine) => (
-            <div key={cuisine.id} className="cuisine-card" onClick={() => handleCuisineClick(cuisine.id)}>
-              <div className="cuisine-image"></div>
-              <h3>{cuisine.name}</h3>
-              <button>View cuisine and chefs</button>
-            </div>
-          ))}
-        </section>
-      </main>
-    </div>
+    <Router>
+      <div className="App">
+        <Header toggleMenu={toggleMenu} />
+        {menuOpen && <Menu closeMenu={closeMenu} />}
+        <main>
+          <Routes>
+            <Route path="/" element={<CuisineList cuisines={cuisines} />} />
+            <Route path="/cuisine/:id" element={<CuisineDetail cuisines={cuisines} />} />
+          </Routes>
+        </main>
+      </div>
+    </Router>
   );
 }
 
