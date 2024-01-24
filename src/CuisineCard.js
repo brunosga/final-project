@@ -1,10 +1,12 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import './App.css';
 
 const CuisineCard = ({ cuisine }) => {
     const navigate = useNavigate();
 
     const navigateToDetail = () => {
+        console.log("Navigating to cuisine with ID:", cuisine.id); // Add this to debug
         navigate(`/cuisine/${cuisine.id}`);
     };
 

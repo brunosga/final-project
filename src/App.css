@@ -152,6 +152,7 @@ button:hover {
   background-color: #e9e9e9;
 }
 
+ /* Styling for chef */
 .chef-section h3 {
   text-align: center;
   margin: 20px;
@@ -163,7 +164,6 @@ button:hover {
   gap: 20px;
   margin: 20px auto;
   width: 80%;
-  /* Additional styles */
 }
 
 .chef-cards {
@@ -174,30 +174,178 @@ button:hover {
 }
 
 .chef-card {
-  border: 1px solid #ccc;
-  text-align: center;
-  padding: 10px;
+  position: relative;
+  width: 300px; /* Adjust size as necessary */
+  margin: 10px;
+  border: 1px solid #ccc; /* Example border, adjust as necessary */
+  border-radius: 10px; /* Rounded corners */
+  overflow: hidden;
+}
+
+.chef-food-image {
+  height: 200px;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.cuisine-image-overlay {
+  width: 100px;
+  height: 100px;
+  background: #fff; /* White background for the chef image */
+  border-radius: 50%; /* Circular overlay */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  bottom: -50px; /* Half outside the bottom border */
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .chef-image {
-  width: 100%;
-  height: 200px; /* Adjust as needed */
-  background-size: cover;
-  background-position: center;
-  margin-bottom: 10px;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
 }
+
+.chef-details {
+  padding: 20px;
+  text-align: center;
+  background: #fff; /* Background for the text */
+  position: relative;
+  top: -30px; /* Move up to overlap the image */
+}
+
+.chef-name {
+  margin: 0;
+}
+
+.chef-price {
+  margin: 0;
+  font-style: italic;
+  color: #666;
+}
+
+/* Back Button Style */
+.back-button {
+  font-size: 1rem;
+  color: #333;
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 10px 20px;
+  margin-right: 20px;
+}
+
+/* Chef Info Section */
+.chef-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.chef-info h2, .chef-info p {
+  margin: 0.5rem 0;
+}
+
+/* Slider for Chef Pictures */
+.slider {
+  display: flex;
+  overflow-x: auto;
+  gap: 10px;
+  margin-bottom: 2rem;
+}
+
+.slide {
+  width: 300px;
+  height: 200px;
+  background-color: #ddd; /* Placeholder for images */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #ccc;
+}
+
+/* About Chef Section */
+.about-chef {
+  background-color: #eee;
+  padding: 1rem;
+  margin-bottom: 2rem;
+}
+
+/* Biography Section */
+.bio {
+  margin-bottom: 2rem;
+}
+
+/* Reviews Section */
+.reviews {
+  margin-bottom: 2rem;
+}
+
+.review {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.review-rating {
+  margin-left: 0.5rem;
+}
+
+/* Special Menu and Contact Section */
+.special-menu, .contact-chef {
+  background-color: #fff;
+  padding: 1rem;
+  margin-bottom: 2rem;
+  border: 1px solid #ccc;
+}
+
+/* Message Area */
+.message-area {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 1rem;
+  margin-bottom: 2rem;
+}
+
+/* Send Message Button */
+.send-message-button {
+  background-color: #000;
+  color: #fff;
+  padding: 1rem;
+  border: none;
+  cursor: pointer;
+}
+
+/* Utility classes */
+.text-center {
+  text-align: center;
+}
+
 
 /* Additional styles... */
 
 
+/* Responsive Design Adjustments */
 @media screen and (max-width: 768px) {
   .cuisine-grid {
     grid-template-columns: 1fr 1fr; /* Two columns for tablet */
+  }
+  .chef-info, .about-chef, .bio, .reviews, .special-menu, .contact-chef, .message-area {
+    width: auto;
   }
 }
 
 @media screen and (max-width: 480px) {
   .cuisine-grid {
     grid-template-columns: 1fr; /* Single column for mobile */
+  }
+  .chef-info, .about-chef, .bio, .reviews, .special-menu, .contact-chef, .message-area {
+    width: auto;
   }
 }

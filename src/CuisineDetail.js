@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import ChefCard from './ChefCard'; // This component displays chef details
+import { db } from './firebase'; // Import your firebase database reference
 
 const CuisineDetail = () => {
     let { id } = useParams(); // Get the id from the URL
@@ -9,23 +10,24 @@ const CuisineDetail = () => {
     const [error, setError] = useState(null); // State to hold any error messages
 
     useEffect(() => {
-        // Replace 'your-api-endpoint' with the actual endpoint
-        fetch(`https://f805bb92-ed78-4c1e-a834-9e920d5d6f83.mock.pstmn.io/chef-card/${id}`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
+        const getCuisineDetail = async () => {
+            setIsLoading(true);
+            try {
+                const doc = await db.collection('cuisines').doc(id).get();
+                if (doc.exists) {
+                    setCuisineDetail({ id: doc.id, ...doc.data() });
+                } else {
+                    setError('Cuisine not found.');
                 }
-                return response.json();
-            })
-            .then(data => {
-                setCuisineDetail(data);
-                setIsLoading(false);
-            })
-            .catch(error => {
+            } catch (error) {
                 setError('Failed to load cuisine details.');
-                setIsLoading(false);
-            });
-    }, [id]); // Fetch data when the component mounts or when the id changes
+            }
+            setIsLoading(false);
+        };
+
+        getCuisineDetail();
+    }, [id]);
+
 
     if (isLoading) {
         return <div>Loading...</div>; // Display a loading state while fetching data
