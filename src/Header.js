@@ -4,7 +4,7 @@ const Header = ({ toggleMenu }) => {
     return (
         <header>
         <div className="logo">
-          <img src="/logo.png" alt="Logo" />
+          <img src="./public/logo.png" alt="Logo" />
         </div>
         <input type="search" placeholder="Search cuisines..." />
         <div className="hamburger-icon" onClick={toggleMenu}>

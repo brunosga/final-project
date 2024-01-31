@@ -1,17 +1,12 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-//import { collection, getDocs} from 'firebase/firestore';
-//import { db } from './firebase'; // Import db from firebase.js
+import { useParams } from 'react-router-dom';
 import Header from './Header';
 import Menu from './Menu';
-//import CuisineList from './CuisineList';
 import CuisineDetail from './CuisineDetail'; // Assume this is a new component for cuisine details
 import Cuisine from './Cuisine'; // Assume this is a new component for cuisine details
+import ChefDetail from './ChefDetail';
 import './App.css';
-import { useParams } from 'react-router-dom';
-
-// Initialize Firebase
-//const myCollection = collection(db, 'cuisines');
 
 const App = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -28,7 +23,8 @@ const App = () => {
         <main>
           <Routes>
             <Route path="/" element={<Cuisine />} />
-            <Route path="/cuisine/:id" element={<CuisineDetail id={params.id} />} />          
+            <Route path="/cuisine/:id" element={<CuisineDetail id={params.id} />} />  
+            <Route path="/chef/:id" element={<ChefDetail />} />        
             </Routes>
         </main>
       </div>

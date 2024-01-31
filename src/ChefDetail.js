@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getChefDetail } from './api/firebase'; // You need to implement this API call
+import { getChefDetail } from './hooks/useChefsDetails';
+import Slider from "react-slick";
 import './App.css';
 
 const ChefDetail = () => {
@@ -11,16 +12,27 @@ const ChefDetail = () => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
+        setIsLoading(true);
         getChefDetail(id)
             .then(data => {
                 setChefDetail(data);
                 setIsLoading(false);
             })
-            .catch(error => {
-                setError('Failed to load chef details.');
+            .catch(err => {
+                setError(err.message);
                 setIsLoading(false);
             });
     }, [id]);
+
+   // Slider settings
+    const settings = {
+        dots: true,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 1,
+        slidesToScroll: 1
+    };
+
 
     if (isLoading) return <div>Loading...</div>;
     if (error) return <div>Error: {error}</div>;
@@ -32,12 +44,15 @@ const ChefDetail = () => {
             <h1>{chefDetail.name}</h1>
             <h2>{chefDetail.cuisine}</h2>
             <div className="chef-images">
-                {/* Implement slider for pictures if multiple images */}
-                {chefDetail.foodImages.map((image, index) => (
-                    <div key={index} className="food-image">
-                        <img src={image} alt={`Food ${index + 1}`} />
-                    </div>
-                ))}
+            {chefDetail.foodImage && chefDetail.foodImage.length > 0 && (
+                <Slider {...settings}>
+                    {chefDetail.foodImage?.map((image, index) => (
+                        <div key={index}>
+                            <img src={image} alt={`Food ${index + 1}`} />
+                        </div>
+                    ))}
+                </Slider>
+            )}
             </div>
             <div className="about-chef">
                 <h3>About the Chef</h3>
