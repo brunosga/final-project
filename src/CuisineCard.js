@@ -15,8 +15,6 @@ const CuisineCard = ({ cuisine }) => {
         <div className="cuisine-card" onClick={navigateToDetail}>
             <div className="cuisine-image" style={{ backgroundImage: `url(${cuisine.imageUrl})` }}></div>
             <h3>{cuisine.name}</h3>
-            <p>{cuisine.test}</p>
-            <p>{cuisine.id}</p>
             <button>View Cuisine and Chefs</button>
             
         </div>

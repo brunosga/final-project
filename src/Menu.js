@@ -5,10 +5,10 @@ const Menu = ({ closeMenu }) => {
         <div className="backdrop" onClick={closeMenu}>
             <div className="menu" onClick={e => e.stopPropagation()}>
                 <div className="close-icon" onClick={closeMenu}>&times;</div>
+                <a href="/login">Login</a>
                 <a href="/messages">Messages</a>
                 <a href="/profile">My Profile</a>
                 <a href="/settings">Settings</a>
-                <a href="/logout">Log Out</a>
                 <a href="/about">About</a>
                 <div className="menu-footer">
                     <div className="logo">LOGO</div>
