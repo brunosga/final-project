@@ -66,8 +66,26 @@ const ChefDetail = () => {
     return (
         <div className="chef-detail">
             <button className='back-button' onClick={() => navigate(-1)}>&lt; All chefs</button>
-            <h1>{chefDetail.name}</h1>
-            <h2>{chefDetail.cuisine}</h2>
+            <div className="chef-profile">
+                {chefDetail.chefImage && (
+                    <div className="chef-image-container">
+                        <img src={chefDetail.chefImage} alt={`Chef ${chefDetail.name}`} />
+                    </div>
+                )}
+                <div className="chef-info">
+                    <h1>{chefDetail.name}</h1>
+                    <h2>{chefDetail.cuisine}</h2>
+                    <div className="about-chef">
+                        <h3>About the Chef</h3>
+                        <p>{chefDetail.bio}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div className="specialties">
+                <h2>Specialties</h2>
+            </div>
+
             <div className="slider-container">
                 <Slider {...settings}>
                     {chefDetail.foodImage?.map((image, index) => (
@@ -76,10 +94,6 @@ const ChefDetail = () => {
                         </div>
                     ))}
                 </Slider>
-            </div>
-            <div className="about-chef">
-                <h3>About the Chef</h3>
-                <p>{chefDetail.bio}</p>
             </div>
             <div className="review-section">
                 <h2>Reviews</h2>

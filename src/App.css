@@ -17,7 +17,7 @@ header {
   justify-content: space-between;
   align-items: center;
   padding: 20px 50px; /* Adds spacing between header and grid */
-  background-color: #ffa56a;
+  background-color: #ff9045;
 }
 
 header div, header input, header button {
@@ -280,6 +280,24 @@ button:hover {
   object-fit: cover; /* Cover the image to avoid stretching */
 }
 
+.chef-profile {
+  display: flex;
+  max-width: 1150px; /* Set the max-width to the size of the square */
+  margin: auto;
+  gap: 30px;
+}
+
+.chef-image-container {
+  flex: 0; /* Adjust as needed, or use a fixed width */
+}
+
+.chef-image-container img {
+  width: 364px;
+  height: 364px;
+  object-fit: cover; 
+  border-radius: 3%; 
+}
+
 .chef-details {
   height: 60px;
   padding: 10px;
@@ -300,11 +318,40 @@ button:hover {
   color: #666;
 }
 
-
 .chef-favorite {
   position: absolute;
   bottom: 16px;
   right: 16px;
+}
+
+/* About Chef Section */
+.about-chef {
+  background: #eee; 
+  padding: 20px;
+  border-radius: 8px;
+}
+
+/* Biography Section */
+.bio {
+  margin-bottom: 2rem;
+}
+
+/* Chef Info Section */
+.chef-info {
+  flex: 2;
+}
+
+.chef-info h2, .chef-info p {
+  margin: 0.5rem 0;
+}
+
+.specialties {
+  max-width: 1150px; /* Set the max-width to the size of the square */
+  margin: auto;
+  background: #ff9045;
+  padding: 20px;
+  margin-top: 15px;
+  border-radius: 8px;
 }
 
 .star-icon {
@@ -315,7 +362,7 @@ button:hover {
 
 /* Back Button Style */
 .back-button {
-  margin-top: 10px;
+  margin: 10px;
   font-size: 1rem;
   padding: 10px 20px;
   background-color: #ffffff; /* Example button color */
@@ -328,15 +375,6 @@ button:hover {
 
 .back-button:hover {
   background-color: #d6d6d6; /* Darken button on hover */
-}
-
-/* Chef Info Section */
-.chef-info {
-  padding: 16px;
-}
-
-.chef-info h2, .chef-info p {
-  margin: 0.5rem 0;
 }
 
 /* Slider for Chef Pictures */
@@ -358,8 +396,8 @@ button:hover {
 }
 
 .slider-container .slick-slide img {
-  width: 100%;
-  height: 242.67%;
+  width: 364px;
+  height: 364px;
   object-fit: cover; /* This will cover the square area without stretching the image */
   border-radius: 8px;
 }
@@ -411,19 +449,6 @@ button:hover {
 
 .slick-dots {
   bottom: -13px; /* Adjust the position of the dots */
-}
-
-/* About Chef Section */
-.about-chef {
-  background-color: #eee;
-  padding: 1rem;
-
-  box-sizing: border-box;
-}
-
-/* Biography Section */
-.bio {
-  margin-bottom: 2rem;
 }
 
 /* Reviews Section */
@@ -500,6 +525,11 @@ button:hover {
   border: none;
   border-radius: 4px;
   cursor: pointer;
+}
+
+.success-message {
+  color: green;
+  margin-top: 20px;
 }
 
 /* Auth Page Section*/
@@ -610,3 +640,25 @@ button:hover {
     width: auto;
   }
 }
+
+@media (max-width: 768px) {
+  .chef-profile {
+    flex-direction: column; /* Stack flex items vertically on small screens */
+  }
+
+  .chef-image-container, .chef-info {
+    flex: none; /* Reset any flex sizing to allow default widths */
+  }
+}
+
+@media (max-width: 480px) {
+  .chef-profile {
+    flex-direction: column; /* Stack flex items vertically on small screens */
+  }
+
+  .chef-image-container, .chef-info {
+    flex: none; /* Reset any flex sizing to allow default widths */
+  }
+}
+
+

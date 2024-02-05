@@ -1,7 +1,7 @@
 // AuthPage.js
 import React, { useEffect, useState } from 'react';
-//import { useNavigate } from 'react-router-dom';
-import { getFirestore, doc, setDoc} from 'firebase/firestore';
+import { useNavigate } from 'react-router-dom';
+import { getFirestore, doc, setDoc } from 'firebase/firestore';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './firebase';
@@ -19,6 +19,10 @@ const AuthPage = () => {
     const [password, setPassword] = useState('');
     const [fullName, setFullName] = useState('');
     const [formErrors, setFormErrors] = useState({});
+    const [successMessage, setSuccessMessage] = useState('');
+    const navigate = useNavigate();
+
+
 
     // Toggle between login and signup form
     const toggleAuthMode = () => {
@@ -63,10 +67,22 @@ const AuthPage = () => {
 
                 // Create user profile object
                 const userProfile = {
-                    uid: user.uid,
+                    id: user.uid,
                     email: email,
-                    fullName: fullName
+                    fullName: fullName,
+                    bio: '',
+                    cuisineType: [''],
+                    chefImage: '',
+                    foodImage: [''],
+                    price: ''
+
                 };
+
+
+                // Set success message based on the user role
+                const successMsg = isChef ? 'Chef account created successfully! Redirecting to profile...' : 'Account created successfully! Redirecting to homepage...';
+                setSuccessMessage(successMsg);
+
 
                 // If signing up as a chef, handle the permissions or roles accordingly
                 if (isChef) {
@@ -75,12 +91,24 @@ const AuthPage = () => {
                     // Add to 'chefs' collection
                     await setDoc(doc(db, "chefs", user.uid), userProfile);
                     // Additional chef-specific setup can go here
+
                 } else {
                     console.log('Creating account as:', isChef ? 'Chef' : 'Regular user');
-
                     // Add to 'users' collection
                     await setDoc(doc(db, "users", user.uid), userProfile);
+                    // Additional user-specific setup can go here
+
                 }
+
+                setTimeout(() => { // Use setTimeout to delay the navigation so users can read the message
+                    if (isChef) {
+                        //navigate('/chef/' + user.uid);
+                        navigate('/');
+                    } else {
+                        navigate('/');
+                    }
+                }, 2000); // Adjust delay as needed
+
 
                 // On successful signup, handle the user's session or redirect to the homepage/dashboard
                 console.log('User signed up successfully', userCredential);
@@ -126,8 +154,6 @@ const AuthPage = () => {
         setFormErrors(errors);
         return formIsValid;
     };
-
-   //  const navigate = useNavigate();
 
     useEffect(() => {
         // Listen for auth state changes
@@ -209,6 +235,9 @@ const AuthPage = () => {
                     <button type="submit" className="auth-submit">
                         {isLogin ? 'Login' : 'Join'}
                     </button>
+
+                    {successMessage && <div className="success-message">{successMessage}</div>}
+
                     {formErrors.auth && <p className="error-message">{formErrors.auth}</p>}
                 </form>
             </div>
