@@ -370,7 +370,7 @@ button:hover {
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  margin-right: 1049px;
+  margin-right: 947px;
 }
 
 .back-button:hover {
@@ -619,8 +619,18 @@ button:hover {
 *, *:before, *:after {
   box-sizing: border-box;
 }
+
 /* Additional styles... */
 
+input[type="text"], textarea {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+}
+
+input[type="file"] {
+  margin-bottom: 10px;
+}
 
 /* Responsive Design Adjustments */
 @media screen and (max-width: 768px) {
