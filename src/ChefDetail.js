@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getChefDetail } from './hooks/useChefsDetails';
 import Slider from "react-slick";
-import { doc, updateDoc, setDoc, arrayUnion } from 'firebase/firestore';
+import { doc, updateDoc, getDoc, setDoc, arrayUnion } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { db, storage } from './firebase'; // Adjust the path if needed
+import { onAuthStateChanged } from 'firebase/auth';
+import { db, auth, storage } from './firebase'; // Adjust the path if needed
 import './App.css';
 
 
@@ -16,6 +17,8 @@ const ChefDetail = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
     const [isEditMode, setIsEditMode] = useState(false);
+    const [currentUser, setCurrentUser] = useState(null);
+    const [isChef, setIsChef] = useState(false);
 
     useEffect(() => {
         setIsLoading(true);
@@ -29,6 +32,26 @@ const ChefDetail = () => {
                 setIsLoading(false);
             });
     }, [id]);
+
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                // User is signed in
+                setCurrentUser(user);
+                // Check if the user ID exists in the chefs collection
+                const chefDocRef = doc(db, 'chefs', user.uid);
+                const chefDocSnap = await getDoc(chefDocRef);
+                setIsChef(chefDocSnap.exists()); // Set true if user is a chef
+            } else {
+                // User is signed out
+                setCurrentUser(null);
+                setIsChef(false);
+            }
+        });
+
+        return () => unsubscribe(); // Unsubscribe on unmount
+    }, []);
+
 
     // Slider settings
     const settings = {
@@ -78,7 +101,7 @@ const ChefDetail = () => {
             const uploadPromises = Array.from(files).map(async (file) => {
                 // Create a unique file name for the storage reference
                 const uniqueFileName = `foodImage_${Date.now()}_${file.name}`;
-                const storageRef = ref(storage, `chef-images/${uniqueFileName}`);
+                const storageRef = ref(storage, `food-images/${uniqueFileName}`);
 
                 // Upload file
                 const uploadResult = await uploadBytes(storageRef, file);
@@ -106,6 +129,28 @@ const ChefDetail = () => {
         }
     };
 
+    const handleProfileImageUpload = async (event) => {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const uniqueFileName = `chefImage_${Date.now()}_${file.name}`;
+        const storageRef = ref(storage, `chef-images/${uniqueFileName}`);
+
+        try {
+            const uploadResult = await uploadBytes(storageRef, file);
+            const downloadUrl = await getDownloadURL(uploadResult.ref);
+
+            // Update Firestore document for chefImage
+            const chefDocRef = doc(db, "chefs", id);
+            await updateDoc(chefDocRef, { chefImage: downloadUrl });
+
+            // Update local state
+            setChefDetail(prevDetails => ({ ...prevDetails, chefImage: downloadUrl }));
+        } catch (error) {
+            console.error("Error uploading profile image:", error);
+        }
+    };
+
     const handleSaveProfile = async () => {
         try {
             await setDoc(doc(db, "chefs", id), chefDetail);
@@ -121,7 +166,10 @@ const ChefDetail = () => {
     return (
         <div className="chef-detail">
             <button className='back-button' onClick={() => navigate(-1)}>&lt; All chefs</button>
-            <button onClick={() => setIsEditMode(prev => !prev)}>Edit Mode</button>
+            {isChef && (
+                <button onClick={() => setIsEditMode(prev => !prev)}>Edit Mode</button>
+            )
+            }
             <div className="chef-profile">
                 {chefDetail.chefImage && (
                     <div className="chef-image-container">
@@ -148,17 +196,27 @@ const ChefDetail = () => {
                                 onChange={e => setChefDetail({ ...chefDetail, bio: e.target.value })}
                                 placeholder="About the Chef"
                             />
+                            <label htmlFor="profile-image-upload" className="custom-file-upload">
+                                Upload Profile Image
+                            </label>
                             <input
+                                id="profile-image-upload"
                                 type="file"
-                                onChange={e => handleImageUpload(e, 'chefImage')}
+                                onChange={handleProfileImageUpload} // Use the new handler
+                                style={{ display: 'none' }} // Hide the default file input
                             />
+                            <label htmlFor="food-image-upload" className="custom-file-upload">
+                                Upload Your Dishes
+                            </label>
                             <input
+                                id="food-image-upload"
                                 type="file"
                                 multiple
                                 onChange={handleImageUpload}
+                                style={{ display: 'none' }} // Hide the default file input
                             />
 
-                            <button onClick={handleSaveProfile}>Save Changes</button>
+                            <button className="save-changes" onClick={handleSaveProfile}>Save Changes</button>
 
                         </>
                     ) : (
@@ -218,3 +276,4 @@ export default ChefDetail;
 
 // Implement 'getChefDetail' function in api/firebase.js
 // This function should fetch the chef's details from Firebase.
+

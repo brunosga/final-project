@@ -586,6 +586,28 @@ button:hover {
   border-radius: 4px;
 }
 
+/* Style the select dropdown */
+.auth-input select {
+  -webkit-appearance: none; /* Remove default styling for WebKit browsers */
+  -moz-appearance: none; /* Remove default styling for Mozilla browsers */
+  appearance: none; /* Remove default styling for modern browsers */
+  background: url('data:image/png;base64,...') no-repeat right; /* Add custom arrow icon */
+  background-position-x: 95%; /* Position the icon from the right */
+  width: 100%; /* Full width */
+  padding: 10px; /* Adjust padding as needed */
+  border: 1px solid #ddd; /* Light grey border */
+  border-radius: 0; /* No border radius for a flat design */
+  box-shadow: none; /* No box-shadow */
+  height: 40px; /* Set a fixed height */
+  font-size: 1em; /* Match font-size of other inputs */
+  cursor: pointer; /* Change cursor to indicate this is a dropdown */
+}
+
+/* Style the options inside the select */
+.auth-input option {
+  padding: 8px; /* Add padding for options for easier click */
+}
+
 .auth-form button {
   padding: 10px;
   border: none;
@@ -603,6 +625,36 @@ button:hover {
 
 .auth-form .checkbox-container input {
   margin-right: 10px;
+}
+
+.cuisine-select-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.cuisine-options {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 5px;
+  max-height: 150px; /* Adjust as needed */
+  overflow-y: auto;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.cuisine-option {
+  padding: 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s; /* Smooth transition for background color */
+}
+
+.cuisine-option:hover {
+  background-color: #e6e6e6; /* Highlight color when hovered */
+}
+
+.cuisine-option.selected {
+  background-color: #33fe00; /* Highlight color when selected */
 }
 
 .error-message {
@@ -626,11 +678,55 @@ input[type="text"], textarea {
   width: 100%;
   padding: 8px;
   margin-bottom: 10px;
+  border: 1px solid #ccc; /* Assuming you want a border similar to your inputs */
+  border-radius: 4px; /* Consistency with other inputs */
+}
+
+/* Specific styles for the textarea */
+textarea {
+  min-height: 225px; /* Adjust the height as needed */
+  max-height: 225px;
+  resize: vertical; /* Allows the user to resize the textarea vertically */
 }
 
 input[type="file"] {
   margin-bottom: 10px;
 }
+
+.custom-file-upload {
+  display: inline-block;
+  padding: 10px 20px;
+  margin-right: 10px;
+  cursor: pointer;
+  background-color: #ddd; /* Light gray background */
+  color: #333; /* Dark text */
+  border: 1px solid #ccc; /* Light gray border */
+  border-radius: 5px; /* Rounded corners */
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  text-align: center;
+}
+
+.custom-file-upload:hover {
+  background-color: #ccc; /* Darker gray on hover */
+}
+
+.save-changes {
+  padding: 10px 20px;
+  background-color: #5cb85c; /* Bootstrap success color */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.save-changes:hover {
+  background-color: #4cae4c; /* Darker green on hover */
+}
+
+
 
 /* Responsive Design Adjustments */
 @media screen and (max-width: 768px) {

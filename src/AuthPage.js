@@ -1,12 +1,12 @@
 // AuthPage.js
+
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getFirestore, doc, setDoc } from 'firebase/firestore';
+import { getFirestore, doc, setDoc, getDocs, collection } from 'firebase/firestore';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './firebase';
 import './App.css';
-
 
 // Initialize Firestore
 const db = getFirestore();
@@ -20,6 +20,8 @@ const AuthPage = () => {
     const [fullName, setFullName] = useState('');
     const [formErrors, setFormErrors] = useState({});
     const [successMessage, setSuccessMessage] = useState('');
+    const [cuisines, setCuisines] = useState([]);
+    const [selectedCuisines, setSelectedCuisines] = useState([]);
     const navigate = useNavigate();
 
 
@@ -39,6 +41,22 @@ const AuthPage = () => {
     const handleEmailChange = (e) => setEmail(e.target.value);
     const handlePasswordChange = (e) => setPassword(e.target.value);
     const handleFullNameChange = (e) => setFullName(e.target.value);
+
+    // Fetch cuisine types from Firestore
+    useEffect(() => {
+        const fetchCuisines = async () => {
+            // Assuming "cuisines" is the name of your collection
+            const querySnapshot = await getDocs(collection(db, "cuisines"));
+            const cuisineOptions = [];
+            querySnapshot.forEach((doc) => {
+                // Push document data along with doc.id to the cuisineOptions array
+                cuisineOptions.push({ id: doc.id, ...doc.data() });
+            });
+            setCuisines(cuisineOptions);
+        };
+
+        fetchCuisines();
+    }, []);
 
     // Form submission handlers
     const handleLogin = async (e) => {
@@ -65,61 +83,80 @@ const AuthPage = () => {
                 const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                 const user = userCredential.user;
 
+                // Ensure that selectedCuisines are defined and mapped properly
+                const selectedCuisineIds = selectedCuisines.map(cuisine => cuisine.id).filter(id => id !== undefined);
+
                 // Create user profile object
-                const userProfile = {
+                const chefProfile = {
                     id: user.uid,
                     email: email,
-                    fullName: fullName,
+                    fullName: fullName || '',
                     bio: '',
-                    cuisineType: [''],
+                    cuisineType: selectedCuisineIds.length > 0 ? selectedCuisineIds : ['defaultCuisineId'], // Provide a default value if array is empty
                     chefImage: '',
                     foodImage: [''],
                     price: ''
 
                 };
 
-
-                // Set success message based on the user role
-                const successMsg = isChef ? 'Chef account created successfully! Redirecting to profile...' : 'Account created successfully! Redirecting to homepage...';
-                setSuccessMessage(successMsg);
-
+                const userProfile = {
+                    id: user.uid,
+                    email: email,
+                    fullName: fullName || '',
+                };
 
                 // If signing up as a chef, handle the permissions or roles accordingly
                 if (isChef) {
                     console.log('Creating account as:', isChef ? 'Chef' : 'Regular user');
 
+                    // Check if userProfile has all the required fields
+                    if (Object.values(userProfile).some(value => value === undefined)) {
+                        console.error('Some user profile information is undefined.');
+                        return;
+                    }
+
                     // Add to 'chefs' collection
-                    await setDoc(doc(db, "chefs", user.uid), userProfile);
-                    // Additional chef-specific setup can go here
+                    await setDoc(doc(db, "chefs", user.uid), chefProfile);
+                    // Redirect to the chef's profile page after a short delay
+                    setTimeout(() => {
+                        navigate(`/chef/${user.uid}`); // Modify this URL to your profile page's path
+                    }, 2000);
 
                 } else {
                     console.log('Creating account as:', isChef ? 'Chef' : 'Regular user');
                     // Add to 'users' collection
                     await setDoc(doc(db, "users", user.uid), userProfile);
-                    // Additional user-specific setup can go here
-
+                    // Redirect to the homepage or user's profile page if needed
+                    setTimeout(() => {
+                        navigate('/'); // Modify as needed
+                    }, 2000);
                 }
-
-                setTimeout(() => { // Use setTimeout to delay the navigation so users can read the message
-                    if (isChef) {
-                        //navigate('/chef/' + user.uid);
-                        navigate('/');
-                    } else {
-                        navigate('/');
-                    }
-                }, 2000); // Adjust delay as needed
-
 
                 // On successful signup, handle the user's session or redirect to the homepage/dashboard
                 console.log('User signed up successfully', userCredential);
 
-                // Redirect to home/dashboard or handle login session
+                // Set success message based on the user role
+                const successMsg = isChef ? 'Chef account created successfully! Redirecting to profile...' : 'Account created successfully! Redirecting to homepage...';
+                setSuccessMessage(successMsg);
+
             } catch (error) {
                 // Handle errors, such as email already in use
                 setFormErrors({ auth: error.message });
                 console.error('Signup error:', error);
             }
         }
+    };
+
+    const toggleCuisineSelection = (cuisineId) => {
+        setSelectedCuisines(prevSelectedCuisines => {
+            if (prevSelectedCuisines.includes(cuisineId)) {
+                // If already selected, remove it from the array
+                return prevSelectedCuisines.filter(id => id !== cuisineId);
+            } else {
+                // Otherwise, add it to the array
+                return [...prevSelectedCuisines, cuisineId];
+            }
+        });
     };
 
     // Chef toggle handler
@@ -194,6 +231,35 @@ const AuthPage = () => {
                 </div>
                 <form onSubmit={isLogin ? handleLogin : handleSignup} className="auth-form">
                     {!isLogin && (
+                        <label className="checkboxLabel">
+                            <input
+                                type="checkbox"
+                                checked={isChef}
+                                onChange={handleChefToggle}
+                                className="form-checkbox"
+                            />
+                            <span className="asChef">Joining as a chef?</span>
+                        </label>
+                    )}
+                    {!isLogin && isChef && (
+                        <div className="cuisine-select-container">
+                            <label>Choose your cuisine types</label>
+                            <div className="cuisine-options">
+                                {cuisines.map(cuisine => (
+                                    <div
+                                        key={cuisine.id}
+                                        onClick={() => toggleCuisineSelection(cuisine.id)}
+                                        className={`cuisine-option ${selectedCuisines.includes(cuisine.id) ? 'selected' : ''}`}
+                                    >
+                                        {cuisine.name}
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
+
+                    {!isLogin && (
                         <input
                             type="text"
                             value={fullName}
@@ -220,18 +286,6 @@ const AuthPage = () => {
                     />
                     {formErrors.password && <p className="error-message">{formErrors.password}</p>}
 
-                    {!isLogin && (
-                        <label className="checkboxLabel">
-                            <input
-                                type="checkbox"
-                                checked={isChef}
-                                onChange={handleChefToggle}
-                                className="form-checkbox"
-                            />
-                            <span className="asChef">Joining as a chef?</span>
-                        </label>
-                    )}
-
                     <button type="submit" className="auth-submit">
                         {isLogin ? 'Login' : 'Join'}
                     </button>
@@ -240,8 +294,8 @@ const AuthPage = () => {
 
                     {formErrors.auth && <p className="error-message">{formErrors.auth}</p>}
                 </form>
-            </div>
-        </div>
+            </div >
+        </div >
     );
 };
 export default AuthPage;
