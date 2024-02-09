@@ -249,7 +249,7 @@ const ChefDetail = () => {
             <div className="review-section">
                 <h2>Reviews</h2>
                 <div className="review-list">
-                    {/* Iterate through reviews and create a review item for each */}
+                    {/* Iterate through reviews and create a review item for each*/}
                     <div className="review-item">
                         <div className="review-avatar"></div>
                         <div className="review-content">
