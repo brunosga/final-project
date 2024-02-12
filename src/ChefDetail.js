@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { getChefDetail } from './hooks/useChefsDetails';
 import Slider from "react-slick";
 import { doc, updateDoc, getDoc, setDoc, arrayUnion } from 'firebase/firestore';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage';
 import { onAuthStateChanged } from 'firebase/auth';
 import { db, auth, storage } from './firebase'; // Adjust the path if needed
 import './App.css';
@@ -110,21 +110,47 @@ const ChefDetail = () => {
             });
 
             // Resolve all promises to get the download URLs
-            const imageUrls = await Promise.all(uploadPromises);
+            const imageUrls = (await Promise.all(uploadPromises)).filter(url => url); // Filter out any undefined or empty strings
 
-            // Update Firestore document with new image URLs
-            const chefDocRef = doc(db, "chefs", id); // Make sure 'id' is the chef's document ID
-            await updateDoc(chefDocRef, {
-                foodImage: arrayUnion(...imageUrls) // This adds the new URLs to the existing array
-            });
+            // Check if there are URLs to update
+            if (imageUrls.length > 0) {
+                // Update Firestore document with new image URLs
+                const chefDocRef = doc(db, "chefs", id); // Make sure 'id' is the chef's document ID
+                await updateDoc(chefDocRef, {
+                    foodImage: arrayUnion(...imageUrls) // This adds the new URLs to the existing array
+                });
 
-            // Update the chefDetail state with the new image URLs
-            setChefDetail(prevDetails => ({
-                ...prevDetails,
-                foodImage: [...prevDetails.foodImage, ...imageUrls]
-            }));
+                // Update the chefDetail state with the new image URLs
+                setChefDetail(prevDetails => ({
+                    ...prevDetails,
+                    foodImage: prevDetails.foodImage ? [...prevDetails.foodImage, ...imageUrls] : [...imageUrls]
+                }));
+            }
         } catch (error) {
             console.error("Error uploading images:", error);
+            // Handle error, e.g., show a message to the user
+        }
+    };
+
+    const handleDeleteImage = async (imageUrl) => {
+        try {
+            // Create a reference to the file to delete
+            const imageRef = ref(storage, imageUrl);
+
+            // Delete the file from Firebase Storage
+            await deleteObject(imageRef);
+
+            // Filter out the image URL from the local state array
+            const updatedImages = chefDetail.foodImage.filter(image => image !== imageUrl);
+
+            // Update Firestore document to remove the image URL
+            const chefDocRef = doc(db, "chefs", id);
+            await updateDoc(chefDocRef, { foodImage: updatedImages });
+
+            // Update local state
+            setChefDetail(prevDetails => ({ ...prevDetails, foodImage: updatedImages }));
+        } catch (error) {
+            console.error("Error deleting image:", error);
             // Handle error, e.g., show a message to the user
         }
     };
@@ -242,6 +268,11 @@ const ChefDetail = () => {
                     {chefDetail.foodImage?.map((image, index) => (
                         <div key={index} className="chef-food-image">
                             <img src={image} alt={`Food ${index + 1}`} />
+                            {isEditMode && (
+                                <button onClick={() => handleDeleteImage(image)} className="delete-image-button">
+                                    Delete
+                                </button>
+                            )}
                         </div>
                     ))}
                 </Slider>
@@ -249,7 +280,7 @@ const ChefDetail = () => {
             <div className="review-section">
                 <h2>Reviews</h2>
                 <div className="review-list">
-                    {/* Iterate through reviews and create a review item for each*/}
+                    {/* Iterate through reviews and create a review item for each */}
                     <div className="review-item">
                         <div className="review-avatar"></div>
                         <div className="review-content">
@@ -277,3 +308,5 @@ export default ChefDetail;
 // Implement 'getChefDetail' function in api/firebase.js
 // This function should fetch the chef's details from Firebase.
 
+
+//add and delete pictires

@@ -383,6 +383,7 @@ button:hover {
   max-width: 1280px; /* Set the max-width to the size of the square */
   margin: auto;
   padding:20px 0; 
+  margin-bottom: 50px;
 }
 
 .slider-container .slick-list {
@@ -448,7 +449,12 @@ button:hover {
 }
 
 .slick-dots {
-  bottom: -13px; /* Adjust the position of the dots */
+  bottom: -30px; /* Adjust the position of the dots */
+}
+
+.delete-image-button {
+
+  margin-bottom: 10px;
 }
 
 /* Reviews Section */
@@ -495,8 +501,6 @@ button:hover {
 .review-comment {
   margin-bottom: 5px;
 }
-
-
 
 .message-section {
   align-items: center;
@@ -566,7 +570,7 @@ button:hover {
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  background-color: #e0e0e0;
+  background-color: #ddd;
 }
 
 .auth-toggle button.active {
@@ -580,7 +584,7 @@ button:hover {
 }
 
 .auth-form input {
-  padding: 10px;
+  padding: 8px;
   margin-bottom: 10px;
   border: 1px solid #ddd;
   border-radius: 4px;
@@ -627,34 +631,81 @@ button:hover {
   margin-right: 10px;
 }
 
-.cuisine-select-container {
+/* Hide the default checkbox */
+.custom-checkbox-input {
+  display: none;
+}
+
+.custom-checkbox {
   display: flex;
-  flex-direction: column;
-}
-
-.cuisine-options {
+  align-items: center;
   border: 1px solid #ddd;
-  border-radius: 4px;
+  margin-bottom: 8px;
+  margin-top: 8px;
   padding: 5px;
-  max-height: 150px; /* Adjust as needed */
-  overflow-y: auto;
-  margin-top: 10px;
-  margin-bottom: 10px;
+  border-radius: 4px; /* Rounded corners */
 }
 
-.cuisine-option {
-  padding: 10px;
-  border-radius: 4px;
+/* Custom styled checkbox */
+.custom-checkbox-label {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 6px;
+  
   cursor: pointer;
-  transition: background-color 0.2s; /* Smooth transition for background color */
+  font-size: 16px;
+  user-select: none;
 }
 
-.cuisine-option:hover {
-  background-color: #e6e6e6; /* Highlight color when hovered */
+
+/* Create a custom box */
+.custom-checkbox-label:before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 25px;
+  height: 25px;
+  background-color: white;
+  border: 2px solid #ddd;
+  border-radius: 4px;
 }
 
-.cuisine-option.selected {
-  background-color: #33fe00; /* Highlight color when selected */
+
+/* When the checkbox is checked, add a blue background */
+.custom-checkbox-input:checked + .custom-checkbox-label:before {
+  background-color: #2196F3;
+  border-color: #2196F3;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.custom-checkbox-label:after {
+  content: '';
+  position: absolute;
+  display: none;
+  left: 9px;
+  top: 5px;
+  width: 8px;
+  height: 15px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
+}
+
+/* Show the checkmark when checked */
+.custom-checkbox-input:checked + .custom-checkbox-label:after {
+  display: block;
+}
+
+/* Style the label text */
+.custom-checkbox-label {
+  color: #333; /* Text color */
+}
+
+/* Customize the focus style */
+.custom-checkbox-input:focus + .custom-checkbox-label:before {
+  box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.5);
 }
 
 .error-message {
@@ -678,7 +729,7 @@ input[type="text"], textarea {
   width: 100%;
   padding: 8px;
   margin-bottom: 10px;
-  border: 1px solid #ccc; /* Assuming you want a border similar to your inputs */
+  border: 1px solid #ddd; /* Assuming you want a border similar to your inputs */
   border-radius: 4px; /* Consistency with other inputs */
 }
 
