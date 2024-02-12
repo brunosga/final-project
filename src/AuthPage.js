@@ -1,8 +1,7 @@
 // AuthPage.js
-
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getFirestore, doc, setDoc, getDocs, collection } from 'firebase/firestore';
+import { getFirestore, doc, setDoc, getDocs, collection, getDoc } from 'firebase/firestore';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './firebase';
@@ -69,33 +68,21 @@ const AuthPage = () => {
         });
     };
 
-    // Form submission handlers
-    const handleLogin = async (e) => {
-        e.preventDefault();
-        if (validateForm()) {
-            try {
-                // Sign in existing user with Firebase Authentication
-                await signInWithEmailAndPassword(auth, email, password);
-                // On successful login, handle the user's session or redirect to the homepage/dashboard
-                console.log('User logged in successfully');
-                // Redirect to home/dashboard or handle login session
-            } catch (error) {
-                // Handle errors, such as incorrect password or no user found
-                setFormErrors({ auth: error.message });
-                console.error('Login error:', error);
-            }
-        }
-    };
     const handleSignup = async (e) => {
         e.preventDefault();
         if (validateForm()) {
+             // Check if at least one cuisine is selected when signing up as a chef
+             if (isChef && selectedCuisines.length === 0) {
+                setFormErrors(errors => ({...errors, cuisine: "Choose at least one cuisine"}));
+                return; // Stop the signup process if no cuisines are selected
+            }
             try {
                 // Create new user with Firebase Authentication
                 const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                 const user = userCredential.user;
 
                 // Ensure that selectedCuisines are defined and mapped properly
-                const selectedCuisineIds = selectedCuisines.map(cuisine => cuisine.id).filter(id => id !== undefined);
+            //    const selectedCuisineIds = selectedCuisines.map(cuisine => cuisine.id).filter(id => id !== undefined);
 
                 // Create user profile object
                 const chefProfile = {
@@ -158,7 +145,37 @@ const AuthPage = () => {
         }
     };
 
-    const toggleCuisineSelection = (cuisineId) => {
+    // Form submission handlers
+    const handleLogin = async (e) => {
+        e.preventDefault();
+        if (validateForm()) {
+            try {
+                // Sign in existing user with Firebase Authentication
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+
+                // Check if the signed-in user is a chef
+                const chefDocRef = doc(db, "chefs", user.uid);
+                const chefDocSnap = await getDoc(chefDocRef);
+
+                if (chefDocSnap.exists()) {
+                    // User is a chef, navigate to chef's profile page
+                    navigate(`/chef/${user.uid}`);
+                } else {
+                    // User is a regular user, navigate to the cuisines page
+                    navigate('/cuisines');
+                }
+                console.log('User logged in successfully');
+               
+            } catch (error) {
+                // Handle errors, such as incorrect password or no user found
+                setFormErrors({ auth: error.message });
+                console.error('Login error:', error);
+            }
+        }
+    };
+
+   /* const toggleCuisineSelection = (cuisineId) => {
         setSelectedCuisines(prevSelectedCuisines => {
             if (prevSelectedCuisines.includes(cuisineId)) {
                 // If already selected, remove it from the array
@@ -168,7 +185,7 @@ const AuthPage = () => {
                 return [...prevSelectedCuisines, cuisineId];
             }
         });
-    };
+    };*/
 
     // Chef toggle handler
     const handleChefToggle = () => setIsChef(!isChef);
@@ -207,8 +224,7 @@ const AuthPage = () => {
         // Listen for auth state changes
         const unsubscribe = onAuthStateChanged(auth, user => {
             if (user) {
-                // User is signed in, see docs for a list of available properties
-                // https://firebase.google.com/docs/reference/js/firebase.User
+                // User is signed in
                 console.log('User is signed in:', user);
             } else {
                 // User is signed out
@@ -305,10 +321,12 @@ const AuthPage = () => {
                     {successMessage && <div className="success-message">{successMessage}</div>}
 
                     {formErrors.auth && <p className="error-message">{formErrors.auth}</p>}
+
+                    {formErrors.cuisine && <p className="error-message">{formErrors.cuisine}</p>}
                 </form>
             </div >
         </div >
     );
 };
-export default AuthPage;
 
+export default AuthPage;
