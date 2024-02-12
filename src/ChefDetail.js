@@ -17,7 +17,6 @@ const ChefDetail = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
     const [isEditMode, setIsEditMode] = useState(false);
-    const [currentUser, setCurrentUser] = useState(null);
     const [isChef, setIsChef] = useState(false);
 
     useEffect(() => {
@@ -37,21 +36,20 @@ const ChefDetail = () => {
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
             if (user) {
                 // User is signed in
-                setCurrentUser(user);
                 // Check if the user ID exists in the chefs collection
                 const chefDocRef = doc(db, 'chefs', user.uid);
                 const chefDocSnap = await getDoc(chefDocRef);
-                setIsChef(chefDocSnap.exists()); // Set true if user is a chef
+                setIsChef(chefDocSnap.exists() && user.uid === id); // Set true if user is a chef and matches the profile ID
             } else {
                 // User is signed out
-                setCurrentUser(null);
                 setIsChef(false);
             }
         });
 
         return () => unsubscribe(); // Unsubscribe on unmount
-    }, []);
+    }, [id]);
 
+    // Add a check to see if the current user can edit the profile
 
     // Slider settings
     const settings = {
@@ -193,9 +191,10 @@ const ChefDetail = () => {
         <div className="chef-detail">
             <button className='back-button' onClick={() => navigate(-1)}>&lt; All chefs</button>
             {isChef && (
-                <button onClick={() => setIsEditMode(prev => !prev)}>Edit Mode</button>
-            )
-            }
+                <button onClick={() => setIsEditMode(!isEditMode)}>
+                    {isEditMode ? 'View Profile' : 'Edit Profile'}
+                </button>
+            )}
             <div className="chef-profile">
                 {chefDetail.chefImage && (
                     <div className="chef-image-container">
