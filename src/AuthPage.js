@@ -58,6 +58,17 @@ const AuthPage = () => {
         fetchCuisines();
     }, []);
 
+    // Function to handle cuisine selection
+    const handleCuisineChange = (cuisineId) => {
+        setSelectedCuisines(prevSelectedCuisines => {
+            if (prevSelectedCuisines.includes(cuisineId)) {
+                return prevSelectedCuisines.filter(id => id !== cuisineId);
+            } else {
+                return [...prevSelectedCuisines, cuisineId];
+            }
+        });
+    };
+
     // Form submission handlers
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -92,9 +103,9 @@ const AuthPage = () => {
                     email: email,
                     fullName: fullName || '',
                     bio: '',
-                    cuisineType: selectedCuisineIds.length > 0 ? selectedCuisineIds : ['defaultCuisineId'], // Provide a default value if array is empty
+                    cuisineType: selectedCuisines, // Use the array of selected cuisine IDs
                     chefImage: '',
-                    foodImage: [''],
+                    foodImage: [],
                     price: ''
 
                 };
@@ -243,18 +254,19 @@ const AuthPage = () => {
                     )}
                     {!isLogin && isChef && (
                         <div className="cuisine-select-container">
-                            <label>Choose your cuisine types</label>
-                            <div className="cuisine-options">
-                                {cuisines.map(cuisine => (
-                                    <div
-                                        key={cuisine.id}
-                                        onClick={() => toggleCuisineSelection(cuisine.id)}
-                                        className={`cuisine-option ${selectedCuisines.includes(cuisine.id) ? 'selected' : ''}`}
-                                    >
-                                        {cuisine.name}
-                                    </div>
-                                ))}
-                            </div>
+                            <label>Choose your cuisine types:</label>
+                            {cuisines.map(cuisine => (
+                                <div key={cuisine.id} className="custom-checkbox">
+                                    <input
+                                        type="checkbox"
+                                        id={`cuisine-${cuisine.id}`}
+                                        className="custom-checkbox-input"
+                                        checked={selectedCuisines.includes(cuisine.id)}
+                                        onChange={() => handleCuisineChange(cuisine.id)}
+                                    />
+                                    <label htmlFor={`cuisine-${cuisine.id}`} className="custom-checkbox-label">{cuisine.name}</label>
+                                </div>
+                            ))}
                         </div>
                     )}
 
