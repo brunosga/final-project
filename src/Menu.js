@@ -1,5 +1,4 @@
 import React from 'react';
-
 import { useAuth } from './AuthContext'; // Adjust the path as necessary
 import { useNavigate } from 'react-router-dom';
 
@@ -10,7 +9,7 @@ const Menu = ({ closeMenu }) => {
     // This function wraps around the context's handleLogout to include navigation and closing the menu
     const handleLogout = async () => {
         await contextHandleLogout(); // Sign out
-        navigate('/'); // Redirect to the home page or login page
+        navigate('/home/'); // Redirect to the home page or login page
         closeMenu(); // Close the menu
     };
 
