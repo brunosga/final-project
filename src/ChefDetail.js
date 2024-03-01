@@ -2,13 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getChefDetail } from './hooks/useChefsDetails';
 import Slider from "react-slick";
-import { doc, updateDoc, getDoc, setDoc, arrayUnion } from 'firebase/firestore';
+import { collection, addDoc, doc, updateDoc, getDoc, setDoc, arrayUnion, Timestamp, getDocs, query, where } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage';
 import { onAuthStateChanged } from 'firebase/auth';
 import { db, auth, storage } from './firebase'; // Adjust the path if needed
-import { useAuth } from './AuthContext'; // Assuming you have a useAuth hook
-import { serverTimestamp } from 'firebase/firestore';
-
 import './App.css';
 
 
@@ -21,10 +18,8 @@ const ChefDetail = () => {
     const [error, setError] = useState(null);
     const [isEditMode, setIsEditMode] = useState(false);
     const [isChef, setIsChef] = useState(false);
-    // Add useState for handling message text
     const [messageText, setMessageText] = useState('');
-    // Use useAuth to determine if a user is logged in and their details
-    const { user } = useAuth();
+
 
     useEffect(() => {
         setIsLoading(true);
@@ -46,8 +41,6 @@ const ChefDetail = () => {
                 // Check if the user ID exists in the chefs collection
                 const chefDocRef = doc(db, 'chefs', user.uid);
                 const chefDocSnap = await getDoc(chefDocRef);
-
-                //De
                 setIsChef(chefDocSnap.exists() && user.uid === id); // Set true if user is a chef and matches the profile ID
             } else {
                 // User is signed out
@@ -195,172 +188,212 @@ const ChefDetail = () => {
         }
     };
 
-    // Function to handle sending a message
-    const handleSendMessage = async () => {
-        if (!messageText.trim()) return; // Prevent sending empty messages
 
-        // Define chat participants
-        const participants = [user.uid, id]; // Assuming 'id' is the chef's UID
-        const chatId = participants.sort().join('_'); // Simple way to generate a consistent chatId
+    // This function will be called when the "Send message" button is clicked
+    const handleSendClick = async () => {
+        // Prevent sending empty messages
+        console.log('Send button clicked');
+        if (!messageText.trim()) return;
 
-        // Reference to a potential chat document between the user and chef
-        const chatDocRef = doc(db, 'chats', chatId);
+        console.log('Attempting to send message:', messageText);
 
-        try {
-            // Try to get the chat document
-            const chatDocSnap = await getDoc(chatDocRef);
-
-            // If the chat document doesn't exist, create it
-            if (!chatDocSnap.exists()) {
-                await setDoc(chatDocRef, {
-                    participants,
-                    messages: [], // Initialize with the first message if you want
-                    // Add other necessary chat initialization fields
-                });
-            }
-
-             // Add the message to the chat document
-            // This is a simplified approach; you might want to structure messages as a subcollection
-            await updateDoc(chatDocRef, {
-                messages: arrayUnion({
-                    senderId: user.uid,
-                    text: messageText,
-                    timestamp: serverTimestamp(), // Import serverTimestamp from Firebase
-                }),
-            });
-
-            // Clear the message input
-            setMessageText('');
-
-            // Optionally navigate the user to the chat or update UI
-        } catch (error) {
-            console.error('Error sending message:', error);
-            // Handle the error appropriately
+        // Get the current user id from the Auth context or Auth state
+        const currentUserId = auth.currentUser?.uid;
+        if (!currentUserId) {
+            console.error('No user is logged in.');
+            return;
         }
+
+        console.log('Current User ID:', currentUserId);
+
+
+        // Check if a chat between the user and the chef already exists
+        const chatsRef = collection(db, 'chats');
+        const q = query(chatsRef, where('participantsIds', 'array-contains', currentUserId));
+        const querySnapshot = await getDocs(q);
+        let existingChatRef = null;
+
+        querySnapshot.forEach((doc) => {
+            const participants = doc.data().participantsIds;
+            if (participants.includes(id)) {
+                existingChatRef = doc.ref; // Chat already exists
+            }
+        });
+
+        let chatDocRef = existingChatRef;
+
+        // If the chat doesn't exist, create it
+        if (!chatDocRef) {
+            chatDocRef = await addDoc(collection(db, 'chats'), {
+                participantsIds: [currentUserId, id],
+                lastMessage: messageText,
+                lastMessageTimestamp: Timestamp.now(),
+            });
+        } else {
+            // If chat exists, update the last message and timestamp
+            await updateDoc(chatDocRef, {
+                lastMessage: messageText,
+                lastMessageTimestamp: Timestamp.now(),
+            });
+        }
+
+        // Add the message to the chat's messages subcollection
+        await addDoc(collection(db, 'chats', chatDocRef.id, 'messages'), {
+            text: messageText,
+            timestamp: Timestamp.now(),
+            senderId: currentUserId,
+            readStatus: false // Assuming you want to track if the message has been read
+        });
+
+        setMessageText('');
     };
 
-        return (
-            <div className="chef-detail">
-                <button className='back-button' onClick={() => navigate(-1)}>&lt; All chefs</button>
-                {isChef && (
-                    <button onClick={() => setIsEditMode(!isEditMode)}>
-                        {isEditMode ? 'View Profile' : 'Edit Profile'}
-                    </button>
+    /*  // Generate a unique chatId, could be a combination of user and chef IDs
+     const chatId = `${currentUserId}_${id}`; // This is a simple way to ensure uniqueness
+
+     // Create a reference to the chat document in Firestore
+     const chatRef = doc(db, 'chats', chatId);
+
+     // Set the chat document with participants and last message details
+     await setDoc(chatRef, {
+         participantsIds: [currentUserId, id],
+         lastMessage: messageText,
+         lastMessageTimestamp: Timestamp.now(),
+     }, { merge: true });
+
+     console.log('Chat document set with last message');
+
+     // Add the message to the chat's messages subcollection
+     const messageRef = collection(db, 'chats', chatId, 'messages');
+     await addDoc(messageRef, {
+         text: messageText,
+         timestamp: Timestamp.now(),
+         senderId: currentUserId,
+     });
+
+     // Clear the textarea after sending the message
+     setMessageText('');
+ }; */
+
+    return (
+        <div className="chef-detail">
+            <button className='back-button' onClick={() => navigate(-1)}>&lt; All chefs</button>
+            {isChef && (
+                <button onClick={() => setIsEditMode(!isEditMode)}>
+                    {isEditMode ? 'View Profile' : 'Edit Profile'}
+                </button>
+            )}
+            <div className="chef-profile">
+                {chefDetail.chefImage && (
+                    <div className="chef-image-container">
+                        <img src={chefDetail.chefImage} alt={`Chef ${chefDetail.name}`} />
+                    </div>
                 )}
-                <div className="chef-profile">
-                    {chefDetail.chefImage && (
-                        <div className="chef-image-container">
-                            <img src={chefDetail.chefImage} alt={`Chef ${chefDetail.name}`} />
-                        </div>
+                <div className="chef-info">
+                    {isEditMode ? (
+                        <>
+                            <input
+                                type="text"
+                                value={chefDetail.name}
+                                onChange={e => setChefDetail({ ...chefDetail, name: e.target.value })}
+                                placeholder="Chef Name"
+                            />
+                            <input
+                                type="text"
+                                value={chefDetail.cuisine}
+                                onChange={e => setChefDetail({ ...chefDetail, cuisine: e.target.value })}
+                                placeholder="Cuisine"
+                            />
+                            <textarea
+                                value={chefDetail.bio}
+                                onChange={e => setChefDetail({ ...chefDetail, bio: e.target.value })}
+                                placeholder="About the Chef"
+                            />
+                            <label htmlFor="profile-image-upload" className="custom-file-upload">
+                                Upload Profile Image
+                            </label>
+                            <input
+                                id="profile-image-upload"
+                                type="file"
+                                onChange={handleProfileImageUpload} // Use the new handler
+                                style={{ display: 'none' }} // Hide the default file input
+                            />
+                            <label htmlFor="food-image-upload" className="custom-file-upload">
+                                Upload Your Dishes
+                            </label>
+                            <input
+                                id="food-image-upload"
+                                type="file"
+                                multiple
+                                onChange={handleImageUpload}
+                                style={{ display: 'none' }} // Hide the default file input
+                            />
+
+                            <button className="save-changes" onClick={handleSaveProfile}>Save Changes</button>
+
+                        </>
+                    ) : (
+                        <>
+                            <h1>{chefDetail.name}</h1>
+                            <h2>{chefDetail.cuisine}</h2>
+                            <div className="about-chef">
+                                <h3>About the Chef</h3>
+                                <p>{chefDetail.bio}</p>
+                            </div>
+                        </>
                     )}
-                    <div className="chef-info">
-                        {isEditMode ? (
-                            <>
-                                <input
-                                    type="text"
-                                    value={chefDetail.name}
-                                    onChange={e => setChefDetail({ ...chefDetail, name: e.target.value })}
-                                    placeholder="Chef Name"
-                                />
-                                <input
-                                    type="text"
-                                    value={chefDetail.cuisine}
-                                    onChange={e => setChefDetail({ ...chefDetail, cuisine: e.target.value })}
-                                    placeholder="Cuisine"
-                                />
-                                <textarea
-                                    value={chefDetail.bio}
-                                    onChange={e => setChefDetail({ ...chefDetail, bio: e.target.value })}
-                                    placeholder="About the Chef"
-                                />
-                                <label htmlFor="profile-image-upload" className="custom-file-upload">
-                                    Upload Profile Image
-                                </label>
-                                <input
-                                    id="profile-image-upload"
-                                    type="file"
-                                    onChange={handleProfileImageUpload} // Use the new handler
-                                    style={{ display: 'none' }} // Hide the default file input
-                                />
-                                <label htmlFor="food-image-upload" className="custom-file-upload">
-                                    Upload Your Dishes
-                                </label>
-                                <input
-                                    id="food-image-upload"
-                                    type="file"
-                                    multiple
-                                    onChange={handleImageUpload}
-                                    style={{ display: 'none' }} // Hide the default file input
-                                />
-
-                                <button className="save-changes" onClick={handleSaveProfile}>Save Changes</button>
-
-                            </>
-                        ) : (
-                            <>
-                                <h1>{chefDetail.name}</h1>
-                                <h2>{chefDetail.cuisine}</h2>
-                                <div className="about-chef">
-                                    <h3>About the Chef</h3>
-                                    <p>{chefDetail.bio}</p>
-                                </div>
-                            </>
-                        )}
-                    </div>
-                </div>
-
-                <div className="specialties">
-                    <h2>Specialties</h2>
-                </div>
-
-
-                <div className="slider-container">
-                    <Slider {...settings}>
-                        {chefDetail.foodImage?.map((image, index) => (
-                            <div key={index} className="chef-food-image">
-                                <img src={image} alt={`Food ${index + 1}`} />
-                                {isEditMode && (
-                                    <button onClick={() => handleDeleteImage(image)} className="delete-image-button">
-                                        Delete
-                                    </button>
-                                )}
-                            </div>
-                        ))}
-                    </Slider>
-                </div>
-                <div className="review-section">
-                    <h2>Reviews</h2>
-                    <div className="review-list">
-                        {/* Iterate through reviews and create a review item for each */}
-                        <div className="review-item">
-                            <div className="review-avatar"></div>
-                            <div className="review-content">
-                                <p className="review-author">karlinha</p>
-                                <p className="review-comment">This is a review comment with some text.</p>
-                                <div className="review-rating">⭐⭐⭐⭐⭐</div>
-                            </div>
-                        </div>
-                        {/* Repeat the .review-item for each review */}
-                    </div>
-                </div>
-
-                {/* Message Section */}
-                <div className="message-section">
-                    <h2>Get in touch with the chef</h2>
-                    <textarea
-                        placeholder="Leave a message for the chef"
-                        value={messageText}
-                        onChange={(e) => setMessageText(e.target.value)}
-                    ></textarea>
-                    <button className="send-message" onClick={handleSendMessage}>
-                        Send message
-                    </button>
                 </div>
             </div>
-        );
-    }
 
-    export default ChefDetail;
+            <div className="specialties">
+                <h2>Specialties</h2>
+            </div>
 
-// Implement 'getChefDetail' function in api/firebase.js
-// This function should fetch the chef's details from Firebase.
+
+            <div className="slider-container">
+                <Slider {...settings}>
+                    {chefDetail.foodImage?.map((image, index) => (
+                        <div key={index} className="chef-food-image">
+                            <img src={image} alt={`Food ${index + 1}`} />
+                            {isEditMode && (
+                                <button onClick={() => handleDeleteImage(image)} className="delete-image-button">
+                                    Delete
+                                </button>
+                            )}
+                        </div>
+                    ))}
+                </Slider>
+            </div>
+            <div className="review-section">
+                <h2>Reviews</h2>
+                <div className="review-list">
+                    {/* Iterate through reviews and create a review item for each */}
+                    <div className="review-item">
+                        <div className="review-avatar"></div>
+                        <div className="review-content">
+                            <p className="review-author">karlinha</p>
+                            <p className="review-comment">This is a review comment with some text.</p>
+                            <div className="review-rating">⭐⭐⭐⭐⭐</div>
+                        </div>
+                    </div>
+                    {/* Repeat the .review-item for each review */}
+                </div>
+            </div>
+
+            {/* Message Section */}
+            <div className="message-section">
+                <h2>Get in touch with the chef</h2>
+                <textarea
+                    id="messageText" // Adding an id
+                    name="messageText" // Adding a name
+                    placeholder="Leave a message for the chef"
+                    value={messageText} // Controlled component
+                    onChange={(e) => setMessageText(e.target.value)} // Update state on change
+                ></textarea>
+                <button className="send-message" onClick={handleSendClick}>Send message</button>
+            </div>
+        </div>
+    );
+}
+
+export default ChefDetail;

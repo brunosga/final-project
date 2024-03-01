@@ -86,7 +86,7 @@ const AuthPage = () => {
 
                 // Create user profile object
                 const chefProfile = {
-                    userId: user.uid,
+                    id: user.uid,
                     email: email,
                     fullName: fullName || '',
                     bio: '',
@@ -98,7 +98,7 @@ const AuthPage = () => {
                 };
 
                 const userProfile = {
-                    userId: user.uid,
+                    id: user.uid,
                     email: email,
                     fullName: fullName || '',
                 };
@@ -126,7 +126,7 @@ const AuthPage = () => {
                     await setDoc(doc(db, "users", user.uid), userProfile);
                     // Redirect to the homepage or user's profile page if needed
                     setTimeout(() => {
-                        navigate('/home'); // Modify as needed
+                        navigate('/'); // Modify as needed
                     }, 2000);
                 }
 
@@ -185,7 +185,7 @@ const AuthPage = () => {
                 return [...prevSelectedCuisines, cuisineId];
             }
         });
-    }; */
+    };*/
 
     // Chef toggle handler
     const handleChefToggle = () => setIsChef(!isChef);

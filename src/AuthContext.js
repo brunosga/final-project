@@ -4,7 +4,6 @@ import { auth } from './firebase';
 import { signOut, onAuthStateChanged } from 'firebase/auth';
 
 const AuthContext = createContext({});
-
 export const AuthProvider = ({ children }) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
