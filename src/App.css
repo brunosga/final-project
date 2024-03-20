@@ -4,6 +4,7 @@
 .App {
   text-align: center; /* Center align the content */
   font-family: Arial, sans-serif; /* Example font */
+  background-color: #ffffff;
 }
 
 .logo img {
@@ -461,7 +462,7 @@ button:hover {
 
 .review-section, .message-section {
   max-width: 600px; /* Set the maximum width for the sections */
-  margin: 20px auto; /* Centers the sections */
+  margin: 50px auto; /* Centers the sections */
   padding: 15px;
   background-color: #f9f9f9;
   border: 1px solid #ddd;

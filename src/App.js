@@ -10,6 +10,7 @@ import AuthPage from './AuthPage';
 import { AuthProvider } from './AuthContext'; // Adjust the path as necessary
 import { ChatProvider } from './ChatContext'; // Import the ChatProvider
 import './App.css';
+import Footer from './Footer';
 
 const App = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -32,7 +33,8 @@ const App = () => {
               <Route path="/chef/:id" element={<ChefDetail />} />
               <Route path="/login/" element={<AuthPage />} />
             </Routes>
-          </main>
+            </main>
+          <Footer />
         </div>
       </Router>
       </ChatProvider>
