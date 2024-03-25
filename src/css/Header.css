@@ -1,0 +1,111 @@
+  header {
+      display: flex;
+      align-items: center;
+      padding: 20px 50px;
+      /* Adds spacing between header and grid */
+      background-color: #ff9045;
+  }
+
+  .logo img {
+      height: 50px;
+      /* Adjust the size as needed */
+      width: auto;
+      /* Maintain aspect ratio */
+  }
+
+/* Align chat and hamburger icons to the right */
+.header-right {
+    margin-left: auto; /* This will push the div to the far right */
+    display: flex;
+    align-items: center;
+}
+
+  header div,
+  header input,
+  header button {
+      margin: 0 10px;
+  }
+
+  .chat-icon,
+.hamburger-icon {
+    cursor: pointer;
+    font-size: 24px;
+    margin-left: 50px; /* Adjust as needed */
+}
+
+  .backdrop {
+      position: relative;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.3);
+      animation: fadeIn 0.3s;
+      z-index: 1000;
+  }
+
+  @keyframes fadeIn {
+      from {
+          opacity: 0;
+      }
+
+      to {
+          opacity: 1;
+      }
+  }
+
+  .menu {
+      background: white;
+      width: 250px;
+      /* Adjust as needed */
+      padding: 20px;
+      position: fixed;
+      top: 0;
+      right: 0;
+      height: 100%;
+      overflow-y: auto;
+      box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
+      animation: slideIn 0.3s;
+  }
+
+  @keyframes slideIn {
+      from {
+          transform: translateX(100%);
+      }
+
+      to {
+          transform: translateX(0);
+      }
+  }
+
+  .close-icon {
+      cursor: pointer;
+      font-size: 24px;
+      /* Adjust as needed */
+      text-align: right;
+  }
+
+  .menu a {
+      display: block;
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+      text-decoration: none;
+      color: #333;
+  }
+
+  .menu-footer {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      padding: 20px;
+      background: #f8f8f8;
+      box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.1);
+  }
+
+  .menu-footer a {
+      display: block;
+      color: #333;
+      text-decoration: none;
+      margin-top: 10px;
+  }

@@ -9,7 +9,9 @@ import ChefDetail from './ChefDetail';
 import AuthPage from './AuthPage';
 import { AuthProvider } from './AuthContext'; // Adjust the path as necessary
 import { ChatProvider } from './ChatContext'; // Import the ChatProvider
+import PasswordReset from './PasswordReset'; // Your renamed PasswordReset component
 import './App.css';
+import './css/Header.css';
 import Footer from './Footer';
 
 const App = () => {
@@ -32,6 +34,7 @@ const App = () => {
               <Route path="/cuisine/:id" element={<CuisineDetail id={params.id} />} />
               <Route path="/chef/:id" element={<ChefDetail />} />
               <Route path="/login/" element={<AuthPage />} />
+              <Route path="/password-reset" element={<PasswordReset />} />
             </Routes>
             </main>
           <Footer />

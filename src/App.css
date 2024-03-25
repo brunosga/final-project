@@ -7,100 +7,6 @@
   background-color: #ffffff;
 }
 
-.logo img {
-  height: 50px; /* Adjust the size as needed */
-  width: auto; /* Maintain aspect ratio */
-}
-
-/*HEADER STYLE*/
-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px 50px; /* Adds spacing between header and grid */
-  background-color: #ff9045;
-}
-
-header div, header input, header button {
-  margin: 0 10px;
-}
-
-.hamburger-icon {
-  cursor: pointer;
-  font-size: 24px; /* Adjust as needed */
-}
-
-.backdrop {
-  position: relative;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.3);
-  animation: fadeIn 0.3s;
-  z-index: 1000;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-.menu {
-  background: white;
-  width: 250px; /* Adjust as needed */
-  padding: 20px;
-  position: fixed;
-  top: 0;
-  right: 0;
-  height: 100%;
-  overflow-y: auto;
-  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
-  animation: slideIn 0.3s;
-}
-
-@keyframes slideIn {
-  from { transform: translateX(100%); }
-  to { transform: translateX(0); }
-}
-
-.close-icon {
-  cursor: pointer;
-  font-size: 24px; /* Adjust as needed */
-  text-align: right;
-}
-
-.menu a {
-  display: block;
-  padding: 10px;
-  border-bottom: 1px solid #ddd;
-  text-decoration: none;
-  color: #333;
-}
-
-.menu-footer {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  padding: 20px;
-  background: #f8f8f8;
-  box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.1);
-}
-
-.menu-footer a {
-  display: block;
-  color: #333;
-  text-decoration: none;
-  margin-top: 10px;
-}
-
-/* SEARCH BAR STYLE */
-input[type="search"] {
-  padding: 10px;
-  width: 300px; /* Set the width of the search bar */
-}
-
 /* APP CUISINE STYLE*/
 .cuisine-grid {
   display: grid;
@@ -540,7 +446,7 @@ button:hover {
 /* Auth Page Section*/
 
 .auth-container {
-  min-height: 100vh;
+  min-height: 70vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -653,7 +559,6 @@ button:hover {
   position: relative;
   padding-left: 35px;
   margin-bottom: 6px;
-  
   cursor: pointer;
   font-size: 16px;
   user-select: none;
@@ -712,6 +617,33 @@ button:hover {
 .error-message {
   color: red;
   font-size: 14px;
+}
+
+.error-message-container {
+  border: 1px solid #ff6a60;
+  background-color: #ffe6e6;
+  color: #ff6a60;
+  text-align: center;
+  padding: 10px;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.error-title {
+  font-weight: bold;
+}
+
+.forgot-password {
+  color: #007bff; /* The color you want for the link */
+  text-align: center;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+.forgot-password:hover {
+  text-decoration: underline;
 }
 
 

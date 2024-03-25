@@ -23,7 +23,7 @@ const CuisineDetail = () => {
         <div className="cuisine-detail">
            
             <div className="cuisine-header">
-            <button className='back-button' onClick={() => navigate(-1)}>&lt; All cuisines</button>
+            <button className='back-button' onClick={() => navigate('/home')}>&lt; All cuisines</button>
                 <div className="cuisine-image" style={{ backgroundImage: `url(${cuisine.imageUrl})` }}>
                 
                     <h1 className="cuisine-title">{cuisine.name}</h1>

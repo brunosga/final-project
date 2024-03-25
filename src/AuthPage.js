@@ -1,10 +1,10 @@
 // AuthPage.js
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getFirestore, doc, setDoc, getDocs, collection, getDoc } from 'firebase/firestore';
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
-import { onAuthStateChanged } from 'firebase/auth';
+import { getFirestore, doc, setDoc, getDocs, collection} from 'firebase/firestore';
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged} from 'firebase/auth';
 import { auth } from './firebase';
+
 import './App.css';
 
 // Initialize Firestore
@@ -18,6 +18,7 @@ const AuthPage = () => {
     const [password, setPassword] = useState('');
     const [fullName, setFullName] = useState('');
     const [formErrors, setFormErrors] = useState({});
+    const [errorMessage, setErrorMessage] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
     const [cuisines, setCuisines] = useState([]);
     const [selectedCuisines, setSelectedCuisines] = useState([]);
@@ -40,6 +41,7 @@ const AuthPage = () => {
     const handleEmailChange = (e) => setEmail(e.target.value);
     const handlePasswordChange = (e) => setPassword(e.target.value);
     const handleFullNameChange = (e) => setFullName(e.target.value);
+
 
     // Fetch cuisine types from Firestore
     useEffect(() => {
@@ -71,9 +73,9 @@ const AuthPage = () => {
     const handleSignup = async (e) => {
         e.preventDefault();
         if (validateForm()) {
-             // Check if at least one cuisine is selected when signing up as a chef
-             if (isChef && selectedCuisines.length === 0) {
-                setFormErrors(errors => ({...errors, cuisine: "Choose at least one cuisine"}));
+            // Check if at least one cuisine is selected when signing up as a chef
+            if (isChef && selectedCuisines.length === 0) {
+                setFormErrors(errors => ({ ...errors, cuisine: "Choose at least one cuisine" }));
                 return; // Stop the signup process if no cuisines are selected
             }
             try {
@@ -82,7 +84,7 @@ const AuthPage = () => {
                 const user = userCredential.user;
 
                 // Ensure that selectedCuisines are defined and mapped properly
-            //    const selectedCuisineIds = selectedCuisines.map(cuisine => cuisine.id).filter(id => id !== undefined);
+                //    const selectedCuisineIds = selectedCuisines.map(cuisine => cuisine.id).filter(id => id !== undefined);
 
                 // Create user profile object
                 const chefProfile = {
@@ -117,7 +119,7 @@ const AuthPage = () => {
                     await setDoc(doc(db, "chefs", user.uid), chefProfile);
                     // Redirect to the chef's profile page after a short delay
                     setTimeout(() => {
-                        navigate(`/chef/${user.uid}`); // Modify this URL to your profile page's path
+                        navigate('/home'); // Modify this URL to your profile page's path
                     }, 2000);
 
                 } else {
@@ -126,7 +128,7 @@ const AuthPage = () => {
                     await setDoc(doc(db, "users", user.uid), userProfile);
                     // Redirect to the homepage or user's profile page if needed
                     setTimeout(() => {
-                        navigate('/'); // Modify as needed
+                        navigate('/home'); // Modify as needed
                     }, 2000);
                 }
 
@@ -134,7 +136,7 @@ const AuthPage = () => {
                 console.log('User signed up successfully', userCredential);
 
                 // Set success message based on the user role
-                const successMsg = isChef ? 'Chef account created successfully! Redirecting to profile...' : 'Account created successfully! Redirecting to homepage...';
+                const successMsg = isChef ? 'Chef account created successfully!' : 'Account created successfully!';
                 setSuccessMessage(successMsg);
 
             } catch (error) {
@@ -150,42 +152,32 @@ const AuthPage = () => {
         e.preventDefault();
         if (validateForm()) {
             try {
-                // Sign in existing user with Firebase Authentication
-                const userCredential = await signInWithEmailAndPassword(auth, email, password);
-                const user = userCredential.user;
-
-                // Check if the signed-in user is a chef
-                const chefDocRef = doc(db, "chefs", user.uid);
-                const chefDocSnap = await getDoc(chefDocRef);
-
-                if (chefDocSnap.exists()) {
-                    // User is a chef, navigate to chef's profile page
-                    navigate(`/chef/${user.uid}`);
-                } else {
-                    // User is a regular user, navigate to the cuisines page
-                    navigate('/home');
-                }
-                console.log('User logged in successfully');
-               
+                await signInWithEmailAndPassword(auth, email, password);
+                console.log('User logged in successfully.');
+                navigate('/home');
             } catch (error) {
-                // Handle errors, such as incorrect password or no user found
-                setFormErrors({ auth: error.message });
-                console.error('Login error:', error);
+                // Log the error for debugging
+                console.error('Login attempt failed with error:', error);
+                // Set a generic error message regardless of the specific error
+                setErrorMessage('Invalid email or password');
             }
         }
     };
 
-   /* const toggleCuisineSelection = (cuisineId) => {
-        setSelectedCuisines(prevSelectedCuisines => {
-            if (prevSelectedCuisines.includes(cuisineId)) {
-                // If already selected, remove it from the array
-                return prevSelectedCuisines.filter(id => id !== cuisineId);
-            } else {
-                // Otherwise, add it to the array
-                return [...prevSelectedCuisines, cuisineId];
-            }
-        });
-    };*/
+
+
+
+    /* const toggleCuisineSelection = (cuisineId) => {
+         setSelectedCuisines(prevSelectedCuisines => {
+             if (prevSelectedCuisines.includes(cuisineId)) {
+                 // If already selected, remove it from the array
+                 return prevSelectedCuisines.filter(id => id !== cuisineId);
+             } else {
+                 // Otherwise, add it to the array
+                 return [...prevSelectedCuisines, cuisineId];
+             }
+         });
+     };*/
 
     // Chef toggle handler
     const handleChefToggle = () => setIsChef(!isChef);
@@ -237,11 +229,45 @@ const AuthPage = () => {
         return () => unsubscribe();
     }, []);
 
+ /*  // Function to handle the closing of the overlay
+  const closeOverlay = () => {
+    setShowPasswordReset(false);
+  }; */
+
+  const navigateToPasswordReset = () => {
+    navigate('/password-reset'); // This will change the URL to "/password-reset"
+  };
+
+    /*   // Handle password reset submission
+      const handlePasswordReset = async (email) => {
+        try {
+          console.log(`Sending password reset email to: ${email}`);
+          await sendPasswordResetEmail(auth, email);
+          console.log('Password reset email sent successfully.'); // Log on success
+          setShowPasswordReset(false);
+          setSuccessMessage('Password reset email sent successfully. Please check your email.');
+        } catch (error) {
+          console.error('Failed to send password reset email:', error);
+          setErrorMessage(error.message);
+        }
+      }; */
+
+      
+
     // Render method
     return (
         <div className="auth-container">
             <div className="auth-box">
                 <h2 className="auth-header">{isLogin ? 'Login to Dining In' : 'Join Dining In'}</h2>
+
+                {/* Error Message Container */}
+                {errorMessage && (
+                    <div className="error-message-container">
+                        <div className="error-title">Wrong Credentials</div>
+                        <div>{errorMessage}</div>
+                    </div>
+                )}
+
                 <div className="auth-toggle">
                     <button
                         className={`auth-toggle-btn ${isLogin ? 'active' : ''}`}
@@ -318,13 +344,20 @@ const AuthPage = () => {
                         {isLogin ? 'Login' : 'Join'}
                     </button>
 
+                    <form onSubmit={isLogin ? handleLogin : handleSignup} className="auth-form"></form>
+
+                    {/* Add Forgot Password Link */}
+                    <div className="forgot-password" onClick={navigateToPasswordReset}>
+          Forgot password?
+        </div>     
+                    
                     {successMessage && <div className="success-message">{successMessage}</div>}
 
                     {formErrors.auth && <p className="error-message">{formErrors.auth}</p>}
 
-                    {formErrors.cuisine && <p className="error-message">{formErrors.cuisine}</p>}
+                    {formErrors.cuisine && <p className="error-message">{formErrors.cuisine}</p>} 
                 </form>
-            </div >
+    </div>
         </div >
     );
 };
