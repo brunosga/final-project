@@ -74,14 +74,14 @@ const renderChatThreads = () => {
   );
 }
 
-const placeholderImage = 'path_to_placeholder_image.png'; // Define a placeholder image URL
+const defaultImage = 'https://dl.dropbox.com/scl/fi/rpn385ekm39c8spf7aret/imagem_2024-03-31_201209793.png?rlkey=bdyv4ryb21d2cvn7ujjdzcdga&'; // Define a placeholder image URL
 
 function ChatThread({ thread, onSelect, participantDetails }) {
   const details = participantDetails[thread.id] || {};
   return (
     <div className="chat-thread" onClick={() => onSelect(thread.id)}>
       <div className="chat-info">
-        <img src={details.image || placeholderImage} alt={details.name || 'Unknown User'} className="chat-avatar" />
+        <img src={details.image || defaultImage} alt={details.name || 'Unknown User'} className="chat-avatar" />
         <div className="chat-name">{details.name || 'Unknown User'}</div>
         <div className="chat-last-message">{thread.lastMessage || 'No message'}</div>
         <div className="chat-timestamp">{thread.lastMessageTimestamp?.toDate().toLocaleString()}</div>

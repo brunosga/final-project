@@ -6,9 +6,7 @@ import { collection, addDoc, doc, updateDoc, getDoc, setDoc, arrayUnion, Timesta
 import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage';
 import { onAuthStateChanged } from 'firebase/auth';
 import { db, auth, storage } from './firebase'; // Adjust the path if needed
-import './App.css';
-
-
+import './css/ChefDetails.css';
 
 const ChefDetail = () => {
     let { id } = useParams();
@@ -19,7 +17,6 @@ const ChefDetail = () => {
     const [isEditMode, setIsEditMode] = useState(false);
     const [isChef, setIsChef] = useState(false);
     const [messageText, setMessageText] = useState('');
-
 
     useEffect(() => {
         setIsLoading(true);
@@ -275,6 +272,10 @@ const ChefDetail = () => {
      setMessageText('');
  }; */
 
+ const defaultImage = 'https://dl.dropbox.com/scl/fi/rpn385ekm39c8spf7aret/imagem_2024-03-31_201209793.png?rlkey=bdyv4ryb21d2cvn7ujjdzcdga&'; // Replace with the actual path to your default image
+
+ 
+
     return (
         <div className="chef-detail">
             <button className='back-button' onClick={() => navigate(-1)}>&lt; All chefs</button>
@@ -283,12 +284,10 @@ const ChefDetail = () => {
                     {isEditMode ? 'View Profile' : 'Edit Profile'}
                 </button>
             )}
-            <div className="chef-profile">
-                {chefDetail.chefImage && (
+            <div className="chef-profile">            
                     <div className="chef-image-container">
-                        <img src={chefDetail.chefImage} alt={`Chef ${chefDetail.name}`} />
-                    </div>
-                )}
+                        <img src={chefDetail.chefImage || defaultImage} alt={`Chef ${chefDetail.name}`} />
+                    </div>         
                 <div className="chef-info">
                     {isEditMode ? (
                         <>
@@ -300,11 +299,12 @@ const ChefDetail = () => {
                             />
                             <input
                                 type="text"
-                                value={chefDetail.cuisine}
-                                onChange={e => setChefDetail({ ...chefDetail, cuisine: e.target.value })}
-                                placeholder="Cuisine"
+                                value={chefDetail.price}
+                                onChange={e => setChefDetail({ ...chefDetail, price: e.target.value })}
+                                placeholder="Please enter your starting price for your services"
                             />
                             <textarea
+                            type="text"
                                 value={chefDetail.bio}
                                 onChange={e => setChefDetail({ ...chefDetail, bio: e.target.value })}
                                 placeholder="About the Chef"
@@ -334,7 +334,7 @@ const ChefDetail = () => {
                         </>
                     ) : (
                         <>
-                            <h1>{chefDetail.name}</h1>
+                        <h1>{chefDetail.name.startsWith("Chef ") ? chefDetail.name : `Chef ${chefDetail.name}`}</h1>
                             <h2>{chefDetail.cuisine}</h2>
                             <div className="about-chef">
                                 <h3>About the Chef</h3>

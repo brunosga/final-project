@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { getFirestore, doc, setDoc, getDocs, collection} from 'firebase/firestore';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged} from 'firebase/auth';
 import { auth } from './firebase';
-
+import './css/AuthPage.css';
 import './App.css';
 
 // Initialize Firestore
@@ -318,7 +318,7 @@ const AuthPage = () => {
                             type="text"
                             value={fullName}
                             onChange={handleFullNameChange}
-                            placeholder="Your full name"
+                            placeholder="Your first and last name"
                             className="auth-input"
                         />
                     )}
@@ -346,10 +346,13 @@ const AuthPage = () => {
 
                     <form onSubmit={isLogin ? handleLogin : handleSignup} className="auth-form"></form>
 
-                    {/* Add Forgot Password Link */}
+                    {/* Conditionally render the 'Forgot password?' link */}
+                {isLogin && (
                     <div className="forgot-password" onClick={navigateToPasswordReset}>
-          Forgot password?
-        </div>     
+                        Forgot password?
+                    </div>
+                )}
+
                     
                     {successMessage && <div className="success-message">{successMessage}</div>}
 

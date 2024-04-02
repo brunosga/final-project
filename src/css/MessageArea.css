@@ -21,7 +21,7 @@
   justify-content: space-between; /* Keep as is for flex alignment */
   padding: 10px;
   border-bottom: 1px solid #ccc;
-  background-color: white; /* Ensure the background is not transparent */
+  background-color: #ff6f00; /* Ensure the background is not transparent */
   z-index: 1010; /* Higher than the .message-area z-index if needed */
   width: 100%; /* Full width */
 }
@@ -112,20 +112,26 @@
 
 .send-button {
   padding: 10px 20px;
-  background-color: #007bff;
+  height: 34px;
+  background-color: #ff6f00;
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
 }
 
-.back-button {
+.back-btn {
   padding: 10px 20px;
-  background-color: #a2a2a2;
-  color: rgb(0, 0, 0);
   border: none;
   border-radius: 5px;
+  font-size: 1rem;
+  background-color: #ff6f00; /* Example button color */
   cursor: pointer;
+  margin-right: 200px;
+}
+
+.back-btn:hover {
+  background-color: #ff983d; /* Example button color on hover */
 }
 
 /* You can add media queries to handle responsiveness */

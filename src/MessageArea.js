@@ -140,12 +140,14 @@ function MessageArea({ activeChatId, selectedThread  }) {
     return () => unsubscribe(); // Clean up subscription
   }, [activeChatId]);
 
+  const defaultImage = 'https://dl.dropbox.com/scl/fi/rpn385ekm39c8spf7aret/imagem_2024-03-31_201209793.png?rlkey=bdyv4ryb21d2cvn7ujjdzcdga&'; // Define a placeholder image URL
+
   return (
     <div className="message-area">
       <div className="message-header">
-        <button onClick={handleBack} className="back-button">&lt;</button>
+        <button onClick={handleBack} className="back-btn">&lt;</button>
         <img
-          src={participantDetails?.chefImage || participantDetails?.image || 'default-avatar.png'}
+          src={participantDetails?.chefImage || participantDetails?.image || defaultImage}
           alt={participantDetails?.name || participantDetails?.fullName || 'Unknown User'}
           className="message-avatar"
         />

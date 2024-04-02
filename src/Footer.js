@@ -7,7 +7,11 @@ const Footer = () => {
   return (
     <footer className="footer">
       <div className="footer-container">
-        <h1>Dinning In</h1>
+      <div className="logo2">
+          <a href="/home">
+            <img src="https://dl.dropbox.com/scl/fi/y1b4spd70dn0tdj3m9eh7/logo1w1-Photoroom-1.png?rlkey=b26muhf3bihl2y4k20np81ldi&" alt="Logo" />
+          </a>
+        </div>
         <div className="footer-links">
           <a href="/about">About Dinning In</a>
           <a href="/join">Join as a chef</a>

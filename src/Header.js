@@ -38,9 +38,12 @@ const Header = ({ toggleMenu }) => {
   return (
     <>
       <header>
+      <div className="hamburger-icon" onClick={toggleMenu}>
+            &#9776; {/* Unicode for hamburger icon */}
+          </div>
         <div className="logo">
           <a href="/home">
-            <img src="https://dl.dropbox.com/scl/fi/gnq44quehl0ly2ngwtgoa/logo.png?rlkey=h5clx6fy1u2w1e8kzu7ut5u0s&" alt="Logo" />
+            <img src="https://dl.dropbox.com/scl/fi/y1b4spd70dn0tdj3m9eh7/logo1w1-Photoroom-1.png?rlkey=b26muhf3bihl2y4k20np81ldi&" alt="Logo" />
           </a>
         </div>
         <div className="header-right">
@@ -49,9 +52,7 @@ const Header = ({ toggleMenu }) => {
               💬 {/* This can be replaced with an actual icon */}
             </div>
           )}
-          <div className="hamburger-icon" onClick={toggleMenu}>
-            &#9776; {/* Unicode for hamburger icon */}
-          </div>
+          
         </div>
       </header>
       <ChatInterface closeChat={() => setChatVisible(false)} />
