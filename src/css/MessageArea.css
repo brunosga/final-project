@@ -7,7 +7,7 @@
   /* Full width */
   height: 100%;
   /* Full height */
-  background-color: white;
+  background-color: #FFE8D2;
   /* Semi-transparent background */
   z-index: 1000;
   /* Make sure it's above other content */
@@ -20,7 +20,6 @@
   align-items: center;
   justify-content: space-between; /* Keep as is for flex alignment */
   padding: 10px;
-  border-bottom: 1px solid #ccc;
   background-color: #ff6f00; /* Ensure the background is not transparent */
   z-index: 1010; /* Higher than the .message-area z-index if needed */
   width: 100%; /* Full width */
@@ -52,11 +51,11 @@
 
 /* Additional style for the message text to differentiate between sent and received */
 .message-item.sent .message-text {
-  background-color: #DCF8C6; /* Light green background for sent messages */
+  background-color: #e5ffd1; /* Light green background for sent messages */
 }
 
 .message-item.received .message-text {
-  background-color: #E5E5EA; /* Light gray for received messages */
+  background-color: #FFF2EE; /* Light gray for received messages */
 }
 
 .message-avatar {
@@ -101,7 +100,7 @@
 /* Input area styling */
 .message-input-area {
   display: flex;
-  border-top: 1px solid #ccc;
+  border-top: 1px solid #ffd3ac;
   padding: 10px;
 }
 

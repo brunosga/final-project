@@ -46,7 +46,7 @@
 button {
   padding: 10px 20px;
   background-color: #ff6f00; /* Example button color */
-  color: #fff; /* Text color for buttons */
+  color: #FFF2EE; /* Text color for buttons */
   border: none;
   font-weight: bold;
   letter-spacing: 1px;
@@ -246,6 +246,7 @@ border-radius: 8px;
 .text-center {
   text-align: center;
 }
+
 
 *, *:before, *:after {
   box-sizing: border-box;

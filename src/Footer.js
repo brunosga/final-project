@@ -13,7 +13,7 @@ const Footer = () => {
           </a>
         </div>
         <div className="footer-links">
-          <a href="/about">About Dinning In</a>
+          <a href="/about">About Dining In</a>
           <a href="/join">Join as a chef</a>
         </div>
         <div className="footer-legal-social">

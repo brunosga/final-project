@@ -1,12 +1,11 @@
 .profile-container {
     min-height: 57vh;
-
-    max-width: 600px;
+    width: 500px;
     margin: 40px auto;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    background-color: #ffffff;
+    background-color: #FFE8D2;
     text-align: center;
   }
   
@@ -28,6 +27,7 @@
     font-weight: bold;
     color: #333;
     margin-bottom: 10px;
+    
   }
   
   .profile-email {
@@ -49,15 +49,25 @@
     padding-bottom: 5px;
     margin-bottom: 10px;
   }
+
+  .profile-image-upload {
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+  }
   
   .profile-info-content {
     font-size: 16px;
     color: #666;
+    
   }
   
   .button-edit {
-    background-color: #007bff;
-    color: white;
+    background-color: #ff6f00;
+    color: #FFF2EE;
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
@@ -67,16 +77,55 @@
   }
   
   .button-edit:hover {
-    background-color: #0056b3;
+    background-color: #ff983d;
   }
   
   .input-edit {
+    padding: 10px 20px;
+    margin-right: 10px;
+    cursor: pointer;
+    background-color: #ffffff; /* Light gray background */
+    color: #1f1f1f; /* Dark text */
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: 1px;
     width: 100%;
-    padding: 10px;
-    margin-bottom: 20px;
-    border: 1px solid #ccc;
+    border: 1px solid #ffd3ac;
     border-radius: 5px;
   }
+  .custom-file-upload {
+    display: inline-block;
+    padding: 10px 20px;
+    margin-right: 10px;
+    cursor: pointer;
+    background-color: #ff6f00; /* Light gray background */
+    color: #ffffff; /* Dark text */
+    border-radius: 5px; /* Rounded corners */
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-align: center;
+  }
   
-  /* Add any additional styles for form elements or other components as needed */
+  .custom-file-upload:hover {
+    background-color: #ff983d; /* Darker gray on hover */
+  }
+  
+  
+  .go-back-button {
+    margin: 10px;
+    font-size: 1rem;
+    padding: 10px 20px;
+    background-color: #FFE8D2; /* Example button color */
+    color: #000000; /* Text color for buttons */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 947px;
+  }
+  
+  .go-back-button:hover {
+    background-color: #ffd3ac; /* Darken button on hover */
+  }
   

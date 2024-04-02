@@ -58,21 +58,22 @@ const Profile = () => {
 
   return (
     <div className="profile-container">
+            <button className='go-back-button' onClick={() => navigate(-1)}>&lt;</button>
       <h1 className="profile-header">Edit Profile</h1>
       <form onSubmit={handleSubmit}>
-        {profilePicture && (
+        
           <img src={profilePicture || defaultImage} alt="profile" className="profile-avatar" />
-        )}
+        
         <div className="profile-info">
           <label className="profile-info-title">Username:</label>
-          <input type="text" value={fullName} onChange={handleNameChange} className="input-edit" />
+          <input type="text" value={fullName} onChange={handleNameChange} className="input-name"
+          placeholder="Your name" />
         </div>
         <div className="profile-info">
-          <label className="profile-info-title">Profile Picture:</label>
-          <input type="file" onChange={handleFileChange} className="input-edit" />
+          <label className="profile-image-upload">Profile Picture:</label>
+          <input  type="file" onChange={handleFileChange} className="input-edit" />
         </div>
         <button type="submit" className="button-edit">Update Profile</button>
-        <button onClick={() => navigate(-1)} className="button-edit" style={{backgroundColor: "#6c757d", marginLeft: "10px"}}>Go Back</button>
       </form>
     </div>
   );

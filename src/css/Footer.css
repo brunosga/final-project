@@ -1,6 +1,6 @@
 .footer {
     background-color: #1f1f1f; /* Adjust the color to match your design */
-    color: #ffffff; /* Text color */
+    color: #FFF2EE; /* Text color */
     padding: 1rem 0;
     font-family: Arial, sans-serif;
     position: relative;
@@ -39,10 +39,13 @@
   }
   
   .footer-links a {
-    color: #fff; /* Adjust link color */
+    color: #FFF2EE; /* Adjust link color */
     margin: 0 15px;
     text-decoration: none;
     font-size: 1.2em; /* Adjust the size as needed */
+  }
+  .footer-links a:hover {
+    color: #ff6f00; /* Light grey color on hover */
   }
   
   .footer-social {
@@ -53,13 +56,13 @@
   }
   
   .footer-social a {
-    color: #fff; /* White color for the icons */
+    color: #FFF2EE; /* White color for the icons */
     margin: 0 10px;
     font-size: 24px; /* Icon size */
   }
   
   .footer-social a:hover {
-    color: #e0e0e0; /* Light grey color on hover */
+    color: #ff6f00; /* Light grey color on hover */
   }
 
   .footer-legal-social {
@@ -87,9 +90,14 @@
     background-color: #ff6f00; /* Color of the line */
   }
   .footer-legal a {
-    color: #fff; /* Adjust link color */
+    color: #FFF2EE; /* Adjust link color */
     text-decoration: none;
   }
+
+  .footer-legal a:hover {
+    color: #ff6f00; /* Light grey color on hover */
+  }
+
   
   .footer-legal span {
     margin: 0 5px;

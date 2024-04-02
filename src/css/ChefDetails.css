@@ -57,7 +57,7 @@
     letter-spacing: 1px;
   }
   .specialties h2 {
-    color: #ffffff;
+    color: #FFF2EE;
   }
   
   .star-icon {
@@ -226,7 +226,7 @@
     padding: 10px;
     margin: 10px 0;
     border-radius: 10px;
-    border: 1px solid #ddd;
+    border: 1px solid #ffd3ac;
     min-height: 100px; /* Adjust height as needed */
   }
   
@@ -234,7 +234,7 @@
     padding: 10px;
     max-width: 100%;
     background-color: #ff6f00;
-    color: white;
+    color: #FFF2EE;
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -252,7 +252,7 @@ input[type="text"], textarea {
     width: 100%;
     padding: 8px;
     margin-bottom: 10px;
-    border: 1px solid #ddd; /* Assuming you want a border similar to your inputs */
+    border: 1px solid #ffd3ac;
     border-radius: 4px; /* Consistency with other inputs */
   }
   
@@ -273,7 +273,7 @@ input[type="text"], textarea {
     margin-right: 10px;
     cursor: pointer;
     background-color: #ff6f00; /* Light gray background */
-    color: #ffffff; /* Dark text */
+    color: #FFF2EE; /* Dark text */
     border-radius: 5px; /* Rounded corners */
     font-family: Arial, sans-serif;
     font-size: 14px;
@@ -289,7 +289,7 @@ input[type="text"], textarea {
   .save-changes {
     padding: 10px 20px;
     background-color: #5cb85c; /* Bootstrap success color */
-    color: white;
+    color: #FFF2EE;
     border: none;
     border-radius: 5px;
     font-family: Arial, sans-serif;
