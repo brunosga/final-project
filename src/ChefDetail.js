@@ -7,6 +7,7 @@ import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage
 import { onAuthStateChanged } from 'firebase/auth';
 import { db, auth, storage } from './firebase'; // Adjust the path if needed
 import './css/ChefDetails.css';
+import './css/Review.css'
 
 const ChefDetail = () => {
     let { id } = useParams();
@@ -17,6 +18,12 @@ const ChefDetail = () => {
     const [isEditMode, setIsEditMode] = useState(false);
     const [isChef, setIsChef] = useState(false);
     const [messageText, setMessageText] = useState('');
+    const [reviewText, setReviewText] = useState('');
+    const [foodRating, setFoodRating] = useState(0);
+    const [communicationRating, setCommunicationRating] = useState(0);
+    const [serviceRating, setServiceRating] = useState(0);
+    const [professionalismRating, setProfessionalismRating] = useState(0);
+    const [reviews, setReviews] = useState([]);
 
     useEffect(() => {
         setIsLoading(true);
@@ -30,6 +37,7 @@ const ChefDetail = () => {
                 setIsLoading(false);
             });
     }, [id]);
+
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -46,6 +54,16 @@ const ChefDetail = () => {
         });
 
         return () => unsubscribe(); // Unsubscribe on unmount
+    }, [id]);
+
+    useEffect(() => {
+        const fetchReviews = async () => {
+            const q = query(collection(db, 'reviews'), where('chefId', '==', id));
+            const querySnapshot = await getDocs(q);
+            setReviews(querySnapshot.docs.map((doc) => doc.data()));
+        };
+
+        fetchReviews();
     }, [id]);
 
     // Add a check to see if the current user can edit the profile
@@ -245,6 +263,146 @@ const ChefDetail = () => {
         setMessageText('');
     };
 
+     // Helper function to get user details
+async function getUserDetails(userId) {
+    const userRef = doc(db, 'users', userId);
+    const userSnap = await getDoc(userRef);
+  
+    if (userSnap.exists()) {
+      return userSnap.data();
+    } else {
+      console.log('User details not found.');
+      return null;  // Handle the case where the user data doesn't exist appropriately
+    }
+  }
+   
+  // Function to submit a review
+  const submitReview = async (event) => {
+      // Prevent the default form submission behavior
+    event.preventDefault();
+    
+    if (!auth.currentUser) {
+      console.error('User not logged in');
+      alert('You must be logged in to submit a review.');
+      return;
+    }
+  
+    // Fetch user details
+    const userDetails = await getUserDetails(auth.currentUser.uid);
+    console.log(userDetails); // Log to see if userDetails are as expected
+
+    if (!userDetails) {
+      console.error('Cannot fetch user details for review');
+      return;
+    }
+  
+    const review = {
+      chefId: id, // ID from the useParams hook
+      userId: auth.currentUser.uid,
+      name: userDetails.fullName, // Assuming 'fullName' is stored in the user document
+      profilePicture: userDetails.profilePicture, // Assuming 'profilePicture' is stored in the user document
+      foodRating,
+      communicationRating,
+      serviceRating,
+      professionalismRating,
+      comment: reviewText,
+      date: Timestamp.now(),
+    };
+  
+    try {
+      const docRef = await addDoc(collection(db, "reviews"), review);
+      console.log('Review submitted successfully');
+      alert('Review submitted successfully');
+
+  
+      // Optionally clear the review form here
+      setReviewText('');
+      setFoodRating(0);
+      setCommunicationRating(0);
+      setServiceRating(0);
+      setProfessionalismRating(0);
+  
+      // Add the review to the local state to update the UI without re-fetching
+      setReviews(currentReviews => [
+        ...currentReviews,
+        { ...review, id: docRef.id } // Include the Firestore-generated ID in the review object
+      ]);
+    } catch (error) {
+      console.error('Error submitting review:', error);
+      // Handle the error, e.g., show a message to the user
+    }
+  }; 
+
+  const reviewSliderSettings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    vertical: true,
+    verticalSwiping: true,
+    nextArrow: <UpArrow />,
+    prevArrow: <DownArrow />
+  };
+  
+  function UpArrow(props) {
+    const { className, style, onClick } = props;
+    return (
+        <div
+        className={`${className} custom-slick-up`} // Renamed class for up arrow
+        style={{ ...style, display: 'block' }} // Your style here
+        onClick={onClick}
+      />
+    );
+  }
+  
+  function DownArrow(props) {
+    const { className, style, onClick } = props;
+    return (
+        <div
+        className={`${className} custom-slick-down`} // Renamed class for down arrow
+        style={{ ...style, display: 'block' }} // Your style here
+        onClick={onClick}
+      />
+    );
+  }
+  
+
+/* 
+    // Add the function to submit a review
+    const submitReview = async () => {
+         // Prevent the default form submission behavior
+    event.preventDefault();
+        if (!auth.currentUser) {
+            console.error('User not logged in');
+            return;
+        }
+
+        const review = {
+            chefId: id, // ID from the useParams hook
+            userId: auth.currentUser.uid,
+            name: "Annonymous", // Replace with actual user name if available
+            profileImage: "User's Profile Image URL", // Replace with actual user profile image URL if available
+            foodRating,
+            communicationRating,
+            serviceRating,
+            professionalismRating,
+            comment: reviewText,
+            date: Timestamp.now(),
+        };
+
+        try {
+            await addDoc(collection(db, "reviews"), review);
+            console.log('Review submitted successfully');
+             alert('Review submitted successfully');
+            // You may want to clear the form or give user feedback here
+        } catch (error) {
+            console.error('Error submitting review:', error);
+        }
+    }; */
+
+
+
     /*  // Generate a unique chatId, could be a combination of user and chef IDs
      const chatId = `${currentUserId}_${id}`; // This is a simple way to ensure uniqueness
 
@@ -272,9 +430,9 @@ const ChefDetail = () => {
      setMessageText('');
  }; */
 
- const defaultImage = 'https://dl.dropbox.com/scl/fi/rpn385ekm39c8spf7aret/imagem_2024-03-31_201209793.png?rlkey=bdyv4ryb21d2cvn7ujjdzcdga&'; // Replace with the actual path to your default image
+    const defaultImage = 'https://dl.dropbox.com/scl/fi/rpn385ekm39c8spf7aret/imagem_2024-03-31_201209793.png?rlkey=bdyv4ryb21d2cvn7ujjdzcdga&'; // Replace with the actual path to your default image
 
- 
+
 
     return (
         <div className="chef-detail">
@@ -284,10 +442,10 @@ const ChefDetail = () => {
                     {isEditMode ? 'View Profile' : 'Edit Profile'}
                 </button>
             )}
-            <div className="chef-profile">            
-                    <div className="chef-image-container">
-                        <img src={chefDetail.chefImage || defaultImage} alt={`Chef ${chefDetail.name}`} />
-                    </div>         
+            <div className="chef-profile">
+                <div className="chef-image-container">
+                    <img src={chefDetail.chefImage || defaultImage} alt={`Chef ${chefDetail.name}`} />
+                </div>
                 <div className="chef-info">
                     {isEditMode ? (
                         <>
@@ -304,7 +462,7 @@ const ChefDetail = () => {
                                 placeholder="Please enter your starting price for your services"
                             />
                             <textarea
-                            type="text"
+                                type="text"
                                 value={chefDetail.bio}
                                 onChange={e => setChefDetail({ ...chefDetail, bio: e.target.value })}
                                 placeholder="About the Chef"
@@ -334,7 +492,7 @@ const ChefDetail = () => {
                         </>
                     ) : (
                         <>
-                        <h1>{chefDetail.name.startsWith("Chef ") ? chefDetail.name : `Chef ${chefDetail.name}`}</h1>
+                            <h1>{chefDetail.name.startsWith("Chef ") ? chefDetail.name : `Chef ${chefDetail.name}`}</h1>
                             <h2>{chefDetail.cuisine}</h2>
                             <div className="about-chef">
                                 <h3>About the Chef</h3>
@@ -366,19 +524,74 @@ const ChefDetail = () => {
             </div>
             <div className="review-section">
                 <h2>Reviews</h2>
+
+
+                {/* Review Form */}
+
                 <div className="review-list">
-                    {/* Iterate through reviews and create a review item for each */}
-                    <div className="review-item">
-                        <div className="review-avatar"></div>
-                        <div className="review-content">
-                            <p className="review-author">karlinha</p>
-                            <p className="review-comment">This is a review comment with some text.</p>
-                            <div className="review-rating">⭐⭐⭐⭐⭐</div>
+                <Slider {...reviewSliderSettings}>
+                    {reviews.map((review, index) => (
+                        <div className="review-item" key={index}>
+                            <div className="review-avatar">
+                                {/* If there is no image, a default one will be shown */}
+                                <img src={review.profilePicture || defaultImage} alt={review.name || 'User'}/>
+                            </div>
+                            <div className="review-content">
+                            <p className="review-author">{review.name || 'Anonymous'}</p>
+                                <p className="review-date">{review.date.toDate().toDateString()}</p>
+                                <p className="review-comment">{review.comment}</p>
+                                <div className="review-rating">Food Rating: {review.foodRating}</div>
+                                {/* Add other ratings like communication, service, professionalism */}
+                            </div>
                         </div>
-                    </div>
-                    {/* Repeat the .review-item for each review */}
+                    ))}
+                </Slider>
                 </div>
+                <form className="review-form" onSubmit={submitReview}>
+                    <h3>Leave a Review</h3>
+                    <textarea
+                        className="input-edit"
+                        value={reviewText}
+                        onChange={(e) => setReviewText(e.target.value)}
+                        placeholder="Your review"
+                    />
+                    {/* Rating Inputs */}
+                    <div className="rating-input">
+                        <input
+                            className="input-edit"
+                            type="number"
+                            value={foodRating}
+                            onChange={(e) => setFoodRating(e.target.value)}
+                            placeholder="Food rating"
+                        />
+                        {/* Repeat for other ratings */}
+                        <input
+                            className="input-edit"
+                            type="number"
+                            value={communicationRating}
+                            onChange={(e) => setCommunicationRating(e.target.value)}
+                            placeholder="Communication rating"
+                        />
+                        <input
+                            className="input-edit"
+                            type="number"
+                            value={serviceRating}
+                            onChange={(e) => setServiceRating(e.target.value)}
+                            placeholder="Service rating"
+                        />
+                        <input
+                            className="input-edit"
+                            type="number"
+                            value={professionalismRating}
+                            onChange={(e) => setProfessionalismRating(e.target.value)}
+                            placeholder="Professionalism rating"
+                        />
+                    </div>
+                    <button className="button-edit" type="submit">Submit Review</button>
+                </form>
+
             </div>
+
 
             {/* Message Section */}
             <div className="message-section">

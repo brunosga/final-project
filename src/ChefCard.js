@@ -22,8 +22,8 @@ const ChefCard = ({ chef }) => {
       </div>
       <div className="cuisineType">{chef.cuisineType}</div>
       <div className="chef-details">
-        <h3 className="chef-name">{chef.name.startsWith("Chef ") ? chef.name : `Chef ${chef.name}`}</h3>
-        <p className="chef-price">From €{chef.price}</p>
+        <h3 className="chef-name">{chef.name.startsWith("Chef") ? chef.name : `Chef ${chef.name}`}</h3>
+        <p className="chef-price">From €{chef.price} per person</p>
       </div>
       <div className="chef-favorite">
     <span className="star-icon">★</span> 
