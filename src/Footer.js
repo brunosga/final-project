@@ -1,0 +1,49 @@
+import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faYoutube, faInstagram, faFacebook, faPinterest, faXTwitter } from '@fortawesome/free-brands-svg-icons';
+import './css/Footer.css'; // Make sure to create a Footer.css file for styling
+
+const Footer = () => {
+  return (
+    <footer className="footer">
+      <div className="footer-container">
+      <div className="logo2">
+          <a href="/home">
+            <img src="https://dl.dropbox.com/scl/fi/y1b4spd70dn0tdj3m9eh7/logo1w1-Photoroom-1.png?rlkey=b26muhf3bihl2y4k20np81ldi&" alt="Logo" />
+          </a>
+        </div>
+        <div className="footer-links">
+          <a href="/about">About Dining In</a>
+          <a href="/join">Join as a chef</a>
+        </div>
+        <div className="footer-legal-social">
+        <div className="footer-legal">
+          <a href="/terms">Terms & Conditions</a>
+          <span> | </span>
+          <a href="/privacy">Privacy Policy</a>
+          <p >
+          ©2024 Dinning In. All Rights Reserved.
+        </p>
+        </div>
+        <div className="footer-social">
+        <a href="your-youtube-link" aria-label="YouTube">
+          <FontAwesomeIcon icon={faYoutube} />
+        </a>
+        <a href="your-instagram-link" aria-label="Instagram">
+          <FontAwesomeIcon icon={faInstagram} />
+        </a>
+        <a href="your-Twitter-link" aria-label="Twitter"><FontAwesomeIcon icon={faXTwitter} /></a>
+        <a href="your-facebook-link" aria-label="Facebook">
+          <FontAwesomeIcon icon={faFacebook} />
+        </a>
+        <a href="your-pinterest-link" aria-label="Pinterest">
+          <FontAwesomeIcon icon={faPinterest} />
+        </a>
+      </div>
+      </div>  
+    </div>
+    </footer>
+  );
+}
+
+export default Footer;

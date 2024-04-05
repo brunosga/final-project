@@ -1,0 +1,163 @@
+  
+  /*header {
+    display: flex;
+    align-items: center;
+    padding: 20px 50px;
+    background-color: #ff6f00;
+}
+
+.logo img {
+    height: 50px;
+    width: auto;
+
+  
+.header-right {
+    margin-left: auto; 
+    align-items: center;
+}*/
+
+  header {
+      display: flex;
+      justify-content: space-between; /* This will space out your logo and the right-side icons*/ 
+      align-items: center;
+      padding: 20px 50px;
+      /* Adds spacing between header and grid */
+      background-color: #ff6f00;
+  }
+
+  .logo {
+    flex-grow: 1; /* This will allow the logo to take up all available space */
+    display: flex;
+    justify-content: center; /* This will center the logo div contents */
+}
+
+  .logo img {
+      height: 50px;
+      /* Adjust the size as needed */
+      width: auto;
+      /* Maintain aspect ratio */
+  }
+
+  .logo2 img {
+    height: 50px;
+    /* Adjust the size as needed */
+    width: auto;
+    /* Maintain aspect ratio */
+}
+
+/* Align chat and hamburger icons to the right */
+    .header-right {
+        display: flex;
+        align-items: center;
+        
+    }
+
+  header div,
+  header input,
+  header button {
+      margin: 0 10px;
+  }
+
+  .chat-icon,
+.hamburger-icon {
+    cursor: pointer;
+    font-size: 24px;
+    margin-left: -15px;
+}
+.chat-icon {
+    margin-left: -45px;
+}
+
+  .backdrop {
+      position: relative;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.3);
+      animation: fadeIn 0.3s;
+      z-index: 1000;
+  }
+
+  @keyframes fadeIn {
+      from {
+          opacity: 0;
+      }
+
+      to {
+          opacity: 1;
+      }
+  }
+
+  .menu {
+      background: #FFE8D2;
+      width: 250px;
+      /* Adjust as needed */
+      padding: 20px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100%;
+      overflow-y: auto;
+      box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
+      animation: slideIn 0.3s;
+  }
+
+  @keyframes slideIn {
+      from {
+          transform: translateX(-100%);
+      }
+
+      to {
+          transform: translateX(0);
+      }
+  }
+
+  .close-icon {
+    color: #1f1f1f;
+      cursor: pointer;
+      font-size: 24px;
+      /* Adjust as needed */
+      text-align: right;
+  }
+
+  .my-profile {
+    display: block;
+    padding: 10px;
+    border-bottom: 1px solid #ffd3ac;
+    text-decoration: none;
+    color: #1f1f1f;
+    }
+
+    .my-profile:hover {
+        border-bottom: 2px solid #ffd3ac;
+    }
+
+    .menu a:hover {
+        border-bottom: 2px solid #ffd3ac;
+    }
+
+  .menu a {
+      display: block;
+      padding: 10px;
+      border-bottom: 1px solid #ffd3ac;
+      text-decoration: none;
+      color: #1f1f1f;
+  }
+
+  .menu-footer {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      padding: 20px;
+      background: #ff6f00;
+      box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.1);
+  }
+
+  .menu-footer a {
+      display: block;
+      color: #1f1f1f;
+      text-decoration: none;
+      margin-top: 10px;
+  }

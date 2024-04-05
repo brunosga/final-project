@@ -27,8 +27,9 @@ const useCuisinesDetails = (id) => {
                 }
             } catch (error) {
                 console.error('Error fetching data:', error);
-                setError('Error fetching data');
+                setError(`Error fetching data: ${error.message}`);
             }
+            
             setIsLoading(false);
         };
 

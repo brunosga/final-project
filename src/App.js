@@ -1,14 +1,20 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import Header from './Header';
 import Menu from './Menu';
+import Profile from './Profile';
 import CuisineDetail from './CuisineDetail'; // Assume this is a new component for cuisine details
 import Cuisine from './Cuisine'; // Assume this is a new component for cuisine details
 import ChefDetail from './ChefDetail';
 import AuthPage from './AuthPage';
 import { AuthProvider } from './AuthContext'; // Adjust the path as necessary
+import { ChatProvider } from './ChatContext'; // Import the ChatProvider
+import PasswordReset from './PasswordReset'; // Your renamed PasswordReset component
+import Cookies from './Cookies';
 import './App.css';
+import './css/Header.css';
+import Footer from './Footer';
 
 const App = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -18,22 +24,28 @@ const App = () => {
   const toggleMenu = () => setMenuOpen(!menuOpen);
   const closeMenu = () => setMenuOpen(false);
   return (
-    <AuthProvider>
-      <Router>
+    <Router>
+    <AuthProvider> 
+      <ChatProvider> {/* Wrap the parts of your app that need chat with ChatProvider */}
         <div className="App">
           <Header toggleMenu={toggleMenu} />
           {menuOpen && <Menu closeMenu={closeMenu} />}
           <main>
             <Routes>
-              <Route path="/" element={<Cuisine />} />
+              <Route path="/home/" element={<Cuisine />} />
               <Route path="/cuisine/:id" element={<CuisineDetail id={params.id} />} />
               <Route path="/chef/:id" element={<ChefDetail />} />
               <Route path="/login/" element={<AuthPage />} />
+              <Route path="/password-reset" element={<PasswordReset />} />
+              <Route path="/profile" element={<Profile />} />
             </Routes>
-          </main>
+            </main>            
+          <Footer />
+          <Cookies />
         </div>
-      </Router>
+      </ChatProvider>
     </AuthProvider>
+    </Router>
   );
 }
 
