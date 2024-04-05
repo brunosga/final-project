@@ -6,8 +6,13 @@ import { collection, addDoc, doc, updateDoc, getDoc, setDoc, arrayUnion, Timesta
 import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage';
 import { onAuthStateChanged } from 'firebase/auth';
 import { db, auth, storage } from './firebase'; // Adjust the path if needed
+import { toast } from 'react-toastify';  // Make sure you install react-toastify if you want to use it for notifications
+import { ToastContainer } from 'react-toastify'; // Import the ToastContainer component
 import './css/ChefDetails.css';
 import './css/Review.css'
+import 'react-toastify/dist/ReactToastify.css';
+
+
 
 const ChefDetail = () => {
     let { id } = useParams();
@@ -20,10 +25,13 @@ const ChefDetail = () => {
     const [messageText, setMessageText] = useState('');
     const [reviewText, setReviewText] = useState('');
     const [foodRating, setFoodRating] = useState(0);
-    const [communicationRating, setCommunicationRating] = useState(0);
-    const [serviceRating, setServiceRating] = useState(0);
-    const [professionalismRating, setProfessionalismRating] = useState(0);
+ //   const [communicationRating, setCommunicationRating] = useState(0);
+ //   const [serviceRating, setServiceRating] = useState(0);
+   // const [professionalismRating, setProfessionalismRating] = useState(0);
     const [reviews, setReviews] = useState([]);
+    const [slideIndex, setSlideIndex] = useState(0);
+    const [hover, setHover] = useState(0);
+    const [averageRating, setAverageRating] = useState(0);
 
     useEffect(() => {
         setIsLoading(true);
@@ -58,13 +66,31 @@ const ChefDetail = () => {
 
     useEffect(() => {
         const fetchReviews = async () => {
-            const q = query(collection(db, 'reviews'), where('chefId', '==', id));
-            const querySnapshot = await getDocs(q);
-            setReviews(querySnapshot.docs.map((doc) => doc.data()));
+          const q = query(collection(db, 'reviews'), where('chefId', '==', id));
+          const querySnapshot = await getDocs(q);
+          const reviewsData = querySnapshot.docs.map((doc) => {
+            // Log the review data to debug
+            console.log(doc.data());
+            return { ...doc.data(), id: doc.id };
+          });
+      
+          setReviews(reviewsData);
+          const averageRating = calculateAverageRating(reviewsData);
+          setAverageRating(averageRating);
         };
-
+      
         fetchReviews();
-    }, [id]);
+      }, [id]);
+      
+
+    // This function should be called to update the state whenever the reviews array updates
+    const calculateAverageRating = (reviews) => {
+        // Only proceed if reviews is not empty
+        if (!reviews.length) return '0.0';
+        const sum = reviews.reduce((acc, review) => acc + (Number(review.foodRating) || 0), 0);
+        const average = (sum / reviews.length) || 0;
+        return average.toFixed(1); // Rounds to one decimal and converts to string
+    };
 
     // Add a check to see if the current user can edit the profile
 
@@ -263,143 +289,223 @@ const ChefDetail = () => {
         setMessageText('');
     };
 
-     // Helper function to get user details
-async function getUserDetails(userId) {
-    const userRef = doc(db, 'users', userId);
-    const userSnap = await getDoc(userRef);
-  
-    if (userSnap.exists()) {
-      return userSnap.data();
-    } else {
-      console.log('User details not found.');
-      return null;  // Handle the case where the user data doesn't exist appropriately
-    }
-  }
-   
-  // Function to submit a review
-  const submitReview = async (event) => {
-      // Prevent the default form submission behavior
-    event.preventDefault();
-    
-    if (!auth.currentUser) {
-      console.error('User not logged in');
-      alert('You must be logged in to submit a review.');
-      return;
-    }
-  
-    // Fetch user details
-    const userDetails = await getUserDetails(auth.currentUser.uid);
-    console.log(userDetails); // Log to see if userDetails are as expected
+    // Helper function to get user details
+    async function getUserDetails(userId) {
+        const userRef = doc(db, 'users', userId);
+        const userSnap = await getDoc(userRef);
 
-    if (!userDetails) {
-      console.error('Cannot fetch user details for review');
-      return;
+        if (userSnap.exists()) {
+            return userSnap.data();
+        } else {
+            console.log('User details not found.');
+            return null;  // Handle the case where the user data doesn't exist appropriately
+        }
     }
-  
-    const review = {
-      chefId: id, // ID from the useParams hook
-      userId: auth.currentUser.uid,
-      name: userDetails.fullName, // Assuming 'fullName' is stored in the user document
-      profilePicture: userDetails.profilePicture, // Assuming 'profilePicture' is stored in the user document
-      foodRating,
-      communicationRating,
-      serviceRating,
-      professionalismRating,
-      comment: reviewText,
-      date: Timestamp.now(),
-    };
-  
-    try {
-      const docRef = await addDoc(collection(db, "reviews"), review);
-      console.log('Review submitted successfully');
-      alert('Review submitted successfully');
 
-  
-      // Optionally clear the review form here
-      setReviewText('');
-      setFoodRating(0);
-      setCommunicationRating(0);
-      setServiceRating(0);
-      setProfessionalismRating(0);
-  
-      // Add the review to the local state to update the UI without re-fetching
-      setReviews(currentReviews => [
-        ...currentReviews,
-        { ...review, id: docRef.id } // Include the Firestore-generated ID in the review object
-      ]);
-    } catch (error) {
-      console.error('Error submitting review:', error);
-      // Handle the error, e.g., show a message to the user
-    }
-  }; 
+    // Function to submit a review
+    const submitReview = async (event) => {
+        // Prevent the default form submission behavior
+        event.preventDefault();
 
-  const reviewSliderSettings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    vertical: true,
-    verticalSwiping: true,
-    nextArrow: <UpArrow />,
-    prevArrow: <DownArrow />
-  };
-  
-  function UpArrow(props) {
-    const { className, style, onClick } = props;
-    return (
-        <div
-        className={`${className} custom-slick-up`} // Renamed class for up arrow
-        style={{ ...style, display: 'block' }} // Your style here
-        onClick={onClick}
-      />
-    );
-  }
-  
-  function DownArrow(props) {
-    const { className, style, onClick } = props;
-    return (
-        <div
-        className={`${className} custom-slick-down`} // Renamed class for down arrow
-        style={{ ...style, display: 'block' }} // Your style here
-        onClick={onClick}
-      />
-    );
-  }
-  
-
-/* 
-    // Add the function to submit a review
-    const submitReview = async () => {
-         // Prevent the default form submission behavior
-    event.preventDefault();
         if (!auth.currentUser) {
             console.error('User not logged in');
+            toast.error('You must be logged in to submit a review.');
+            return;
+        }
+
+        // Fetch user details
+        const userDetails = await getUserDetails(auth.currentUser.uid);
+        console.log(userDetails); // Log to see if userDetails are as expected
+
+        if (!userDetails) {
+            console.error('Cannot fetch user details for review');
             return;
         }
 
         const review = {
             chefId: id, // ID from the useParams hook
             userId: auth.currentUser.uid,
-            name: "Annonymous", // Replace with actual user name if available
-            profileImage: "User's Profile Image URL", // Replace with actual user profile image URL if available
+            name: userDetails.fullName, // Assuming 'fullName' is stored in the user document
+            profilePicture: userDetails.profilePicture, // Assuming 'profilePicture' is stored in the user document
             foodRating,
-            communicationRating,
-            serviceRating,
-            professionalismRating,
+          //  communicationRating,
+           // serviceRating,
+           // professionalismRating,
             comment: reviewText,
             date: Timestamp.now(),
         };
 
         try {
-            await addDoc(collection(db, "reviews"), review);
+
+            
+
+            // Push the new review to Firestore
+            const docRef = await addDoc(collection(db, "reviews"), review);
             console.log('Review submitted successfully');
-             alert('Review submitted successfully');
-            // You may want to clear the form or give user feedback here
-        } catch (error) {
-            console.error('Error submitting review:', error);
-        }
-    }; */
+            toast.success('Review submitted successfully');
+
+           // Update the local state with the new review
+        setReviews((currentReviews) => {
+            const updatedReviews = [...currentReviews, { ...review, id: docRef.id }];
+            return updatedReviews;
+        });
+
+        // Recalculate the average rating based on the updated reviews
+        const updatedReviews = [...reviews, { ...review, id: docRef.id }];
+        const newAverageRating = calculateAverageRating(updatedReviews);
+        setAverageRating(newAverageRating);
+
+        // Resetting the form fields
+        setReviewText('');
+        setFoodRating(0);
+        // ... reset other ratings as needed
+    } catch (error) {
+        console.error('Error submitting review:', error);
+        toast.error('Error submitting review.');
+    }
+};
+
+    const reviewSliderSettings = {
+        dots: true,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        vertical: true,
+        verticalSwiping: true,
+        nextArrow: <UpArrow />,
+        prevArrow: <DownArrow />,
+        beforeChange: (current, next) => setSlideIndex(next) // Update state with current slide index
+    };
+
+    function UpArrow(props) {
+        const { className, style, onClick, currentSlide, slideCount } = props;
+        return (
+            <div
+                className={`${className} custom-slick-up`} // Renamed class for up arrow
+                style={{ ...style, display: currentSlide === slideCount - 1 ? 'none' : 'block' }} // Hide on last slide
+
+                onClick={onClick}
+            />
+        );
+    }
+
+    function DownArrow(props) {
+        const { className, style, onClick, currentSlide } = props;
+        return (
+            <div
+                className={`${className} custom-slick-down`} // Renamed class for down arrow
+                style={{ ...style, display: currentSlide === 0 ? 'none' : 'block' }} // Hide on first slide
+                onClick={onClick}
+            />
+        );
+    }
+
+    const StarRating = ({ rating, setRating }) => {
+        return (
+            <div className="star-rating">
+                {[...Array(5)].map((star, index) => {
+                    const ratingValue = index + 1;
+
+                    return (
+                        <span
+                            key={ratingValue}
+                            className={`star ${ratingValue <= (hover || rating) ? 'on' : ''}`}
+                            onClick={() => setRating(ratingValue)}
+                            onMouseEnter={() => setHover(ratingValue)}
+                            onMouseLeave={() => setHover(rating)}
+                        >
+                            &#9733; {/* Unicode star character */}
+                        </span>
+                    );
+                })}
+            </div>
+        );
+    };
+
+    const ReadOnlyStars = ({ rating }) => {
+        // Convert rating to a number and round to nearest half
+        const roundedRating = Math.round(rating * 2) / 2;
+
+        return (
+            <div className="star-rating">
+                {[...Array(5)].map((_, i) => (
+                    <span key={i} className={`star ${i < roundedRating ? 'on' : i === roundedRating - 0.5 ? 'half' : 'off'}`}>
+                        {i === roundedRating - 0.5 ? <>&#9734;</> : <>&#9733;</>} {/* Display half star or full star */}
+                    </span>
+                ))}
+            </div>
+        );
+    };
+
+    const AverageRating = ({ rating, reviewCount }) => {
+        // Parse the rating to a number and clamp it between 0 and 5
+        const numericRating = parseFloat(rating);
+        const clampedRating = Math.max(0, Math.min(numericRating, 5));
+
+        // Calculate the number of full stars
+        const fullStars = Math.floor(clampedRating);
+        // Check if there should be a half star
+        const halfStar = clampedRating % 1 >= 0.5 ? 1 : 0;
+        // The rest are empty stars
+        const emptyStars = 5 - fullStars - halfStar;
+
+        return (
+            <div className="average-rating">
+                {[...Array(fullStars)].map((_, i) => (
+                    <span key={i} className="star on">&#9733;</span>
+                ))}
+                {halfStar ? <span className="star half">&#9733;</span> : null}
+                {[...Array(emptyStars)].map((_, i) => (
+                    <span key={i} className="star off">&#9733;</span>
+                ))}
+                <span className="average-rating-value">{clampedRating.toFixed(1)}</span>
+                <span className="review-count">{reviewCount} ratings</span> {/* This displays the review count */}
+            </div>
+        );
+    };
+
+
+    // Use the AverageRating component in your render method
+
+    <div className="average-rating-container">
+        <AverageRating rating={averageRating} reviewCount={reviews.length} />
+    </div>
+
+
+
+    /* 
+        // Add the function to submit a review
+        const submitReview = async () => {
+             // Prevent the default form submission behavior
+        event.preventDefault();
+            if (!auth.currentUser) {
+                console.error('User not logged in');
+                return;
+            }
+    
+            const review = {
+                chefId: id, // ID from the useParams hook
+                userId: auth.currentUser.uid,
+                name: "Annonymous", // Replace with actual user name if available
+                profileImage: "User's Profile Image URL", // Replace with actual user profile image URL if available
+                foodRating,
+                communicationRating,
+                serviceRating,
+                professionalismRating,
+                comment: reviewText,
+                date: Timestamp.now(),
+            };
+    
+            try {
+                await addDoc(collection(db, "reviews"), review);
+                console.log('Review submitted successfully');
+                 alert('Review submitted successfully');
+                // You may want to clear the form or give user feedback here
+            } catch (error) {
+                console.error('Error submitting review:', error);
+            }
+        }; */
 
 
 
@@ -435,6 +541,8 @@ async function getUserDetails(userId) {
 
 
     return (
+        <div>
+      <ToastContainer position="bottom-center" />
         <div className="chef-detail">
             <button className='back-button' onClick={() => navigate(-1)}>&lt; All chefs</button>
             {isChef && (
@@ -527,25 +635,30 @@ async function getUserDetails(userId) {
 
 
                 {/* Review Form */}
+                <div className="average-rating-container">
+                    <h2>Average Rating</h2>
+                    <AverageRating rating={averageRating} />
+                </div>
 
                 <div className="review-list">
-                <Slider {...reviewSliderSettings}>
-                    {reviews.map((review, index) => (
-                        <div className="review-item" key={index}>
-                            <div className="review-avatar">
-                                {/* If there is no image, a default one will be shown */}
-                                <img src={review.profilePicture || defaultImage} alt={review.name || 'User'}/>
-                            </div>
-                            <div className="review-content">
-                            <p className="review-author">{review.name || 'Anonymous'}</p>
-                                <p className="review-date">{review.date.toDate().toDateString()}</p>
-                                <p className="review-comment">{review.comment}</p>
-                                <div className="review-rating">Food Rating: {review.foodRating}</div>
-                                {/* Add other ratings like communication, service, professionalism */}
-                            </div>
-                        </div>
-                    ))}
-                </Slider>
+                    <Slider {...reviewSliderSettings}
+                        slideCount={reviews.length}
+                        currentSlide={slideIndex}>
+                        {reviews.map((review, index) => (
+  <div className="review-item" key={index}>
+    <div className="review-avatar">
+      <img src={review.profilePicture || defaultImage} alt={review.name || 'User'} />
+    </div>
+    <div className="review-content">
+      <p className="review-author">{review.name || 'Anonymous'}</p>
+      {/* Check if review.date exists and is a Firestore Timestamp */}
+      <p className="review-date">{review.date?.toDate ? review.date.toDate().toDateString() : 'Unknown date'}</p>
+      <p className="review-comment">{review.comment}</p>
+      <div className="review-rating"><ReadOnlyStars rating={review.foodRating} /></div>
+    </div>
+  </div>
+))}
+                    </Slider>
                 </div>
                 <form className="review-form" onSubmit={submitReview}>
                     <h3>Leave a Review</h3>
@@ -557,14 +670,16 @@ async function getUserDetails(userId) {
                     />
                     {/* Rating Inputs */}
                     <div className="rating-input">
-                        <input
+                        <StarRating rating={foodRating} setRating={setFoodRating} />
+
+                        {/*  <input
                             className="input-edit"
                             type="number"
                             value={foodRating}
                             onChange={(e) => setFoodRating(e.target.value)}
                             placeholder="Food rating"
-                        />
-                        {/* Repeat for other ratings */}
+                        />*/}
+                        {/* Repeat for other ratings 
                         <input
                             className="input-edit"
                             type="number"
@@ -585,7 +700,7 @@ async function getUserDetails(userId) {
                             value={professionalismRating}
                             onChange={(e) => setProfessionalismRating(e.target.value)}
                             placeholder="Professionalism rating"
-                        />
+                        />*/}
                     </div>
                     <button className="button-edit" type="submit">Submit Review</button>
                 </form>
@@ -605,6 +720,7 @@ async function getUserDetails(userId) {
                 ></textarea>
                 <button className="send-message" onClick={handleSendClick}>Send message</button>
             </div>
+        </div>
         </div>
     );
 }
