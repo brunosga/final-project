@@ -32,18 +32,18 @@ The website is currently populated with fake chefs for development process and t
 ## Notes:
 
 This code was developed By Bruno Almeida with the help of teachers and classmates from the Dorset College, and the use of tools and platforms like:
-`-`[Github](https://github.com)
-`-`[Figma](https://www.figma.com)
-`-`[OpenAi](https://chat.openai.com)
-`-`[Coolors](https://coolors.co)
-`-`[Youtube](https://www.youtube.com)
-`-`[Font Awesome](https://fontawesome.com)
-`-`[Firefoo](https://www.firefoo.app)
-`-`[Stack Overflow](https://stackoverflow.com)
-`-`[w3schools](https://www.w3schools.com/css/css3_animations.asp)
-`-`[Mycolor](https://mycolor.space)
-`-`[Munnelly](https://www.munnelly.com)
-`-`[Lunevedy]´(https://lunevedy.com)
+-[Github](https://github.com)
+-[Figma](https://www.figma.com)
+-[OpenAi](https://chat.openai.com)
+-[Coolors](https://coolors.co)
+-[Youtube](https://www.youtube.com)
+-[Font Awesome](https://fontawesome.com)
+-[Firefoo](https://www.firefoo.app)
+-[Stack Overflow](https://stackoverflow.com)
+-[w3schools](https://www.w3schools.com/css/css3_animations.asp)
+-[Mycolor](https://mycolor.space)
+-[Munnelly](https://www.munnelly.com)
+-[Lunevedy](https://lunevedy.com)
 
 Each and every part of this software was thought and planned carefully
 
