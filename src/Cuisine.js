@@ -1,5 +1,4 @@
-// give a dummy page to display the cuisine list with cards to direct to the cuisine detail page, pass the id to the cuisine detail page to display the data
-
+// Import necessary dependencies
 import React from 'react';
 import CuisineCard from './CuisineCard';
 import useCuisines from './hooks/useCuisines';
@@ -28,4 +27,4 @@ const Cuisine = () => {
 }
 
 
-export default Cuisine;
+export default Cuisine; // Export the component for use in other parts of the app

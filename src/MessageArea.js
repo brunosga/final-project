@@ -1,29 +1,30 @@
-// MessageArea.js
+// Import necessary dependencies
 import React, { useContext, useState, useEffect, useRef } from 'react';
-import { sendMessage, subscribeToMessages } from './ChatService'; // These are your custom functions to handle messages
-import { ChatContext } from './ChatContext'; // Import the ChatContext
-import { auth, db } from './firebase';
-import { getDoc, doc } from 'firebase/firestore';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import './css/MessageArea.css';
+import { sendMessage, subscribeToMessages } from './ChatService'; 
+import { ChatContext } from './ChatContext'; 
+import { auth, db } from './firebase'; 
+import { getDoc, doc } from 'firebase/firestore'; 
+import { useAuthState } from 'react-firebase-hooks/auth'; 
+import './css/MessageArea.css'; 
 
-function MessageArea({ activeChatId, selectedThread  }) {
-  const [user] = useAuthState(auth);
-  const { setActiveChatId } = useContext(ChatContext); // Access the setActiveChatId function from context
-  const [currentMessages, setCurrentMessages] = useState([]);
-  const [newMessage, setNewMessage] = useState('');
-  // const [currentUser, setCurrentUser] = useState(null);
-  const [participantDetails, setParticipantDetails] = useState(null);
-  const messageListRef = useRef(null); // Ref for the message list container
+// The MessageArea component handles the display and sending of messages within a chat thread
+function MessageArea({ activeChatId, selectedThread }) {
+  const [user] = useAuthState(auth); // State hook to manage current user via Firebase authentication
+  const { setActiveChatId } = useContext(ChatContext); // Accessing context to manage active chat ID
+  const [currentMessages, setCurrentMessages] = useState([]); // State for managing the array of messages and the current message being typed
+  const [newMessage, setNewMessage] = useState('');   // State for managing new messages
+  const [participantDetails, setParticipantDetails] = useState(null); // State for storing details about the chat participant (other than the current user)
+  const messageListRef = useRef(null); // Ref for auto-scrolling message list container to the bottom
 
 
+  // Function to always show the most recent message
   const scrollToBottom = () => {
     messageListRef.current.scrollTop = messageListRef.current.scrollHeight;
   };
 
-  
+  // Effect hook to subscribe to new messages in the current chat and clean up on component unmount
   useEffect(() => {
-    let unsubscribe = () => {};
+    let unsubscribe = () => { };
 
     if (activeChatId) {
       unsubscribe = subscribeToMessages(activeChatId, (messages) => {
@@ -35,9 +36,8 @@ function MessageArea({ activeChatId, selectedThread  }) {
     return () => unsubscribe();
   }, [activeChatId]);
 
+  // Effect hook to scroll to bottom immediately after the first render and when the currentMessages state updates
   useEffect(() => {
-    // Scroll to bottom immediately after the first render
-    // and when the currentMessages state updates.
     if (currentMessages.length) {
       scrollToBottom();
     }
@@ -53,9 +53,7 @@ function MessageArea({ activeChatId, selectedThread  }) {
     return () => unsubscribe(); // Clean up subscription
   }, [activeChatId]);
 
-  
-
-
+  // Effect hook to fetch details of the other participant in the chat based on activeChatId and current user
   useEffect(() => {
     const fetchParticipantDetails = async () => {
       if (activeChatId && user) {
@@ -69,8 +67,8 @@ function MessageArea({ activeChatId, selectedThread  }) {
           let participantDocRef = doc(db, 'users', otherParticipantId);
           let participantDocSnap = await getDoc(participantDocRef);
 
+          // If not found in 'users', try 'chefs' collection
           if (!participantDocSnap.exists()) {
-            // If not found in 'users', try 'chefs' collection
             participantDocRef = doc(db, 'chefs', otherParticipantId);
             participantDocSnap = await getDoc(participantDocRef);
           }
@@ -91,18 +89,17 @@ function MessageArea({ activeChatId, selectedThread  }) {
     fetchParticipantDetails();
   }, [activeChatId, user]);
 
- 
-
-      // Handle Enter key press in input to send message
+  // Handle Enter key press in input to send message
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
       handleSendMessage();
     }
   };
 
+  // Function to send a new message
   const handleSendMessage = async () => {
     if (newMessage.trim()) {
-      // Assuming `auth.currentUser.uid` gives us the current user's ID
+      // Assuming `auth.currentUser.uid` gives the current user's ID
       const userId = auth.currentUser.uid;
 
       // Fetch the user's full name from the 'users' collection
@@ -120,6 +117,7 @@ function MessageArea({ activeChatId, selectedThread  }) {
     }
   };
 
+  // Function to handle navigation back to the chat list
   const handleBack = () => {
     setActiveChatId(null); // Clear the active chat ID to return to the chat list
   };
@@ -147,7 +145,7 @@ function MessageArea({ activeChatId, selectedThread  }) {
       <div className="message-header">
         <button onClick={handleBack} className="back-btn">&lt;</button>
         <img
-          src={participantDetails?.chefImage || participantDetails?.image || defaultImage}
+          src={participantDetails?.chefImage || participantDetails?.image || defaultImage} // If doesn't find the main image it will try the other and so on
           alt={participantDetails?.name || participantDetails?.fullName || 'Unknown User'}
           className="message-avatar"
         />
@@ -187,4 +185,4 @@ function MessageArea({ activeChatId, selectedThread  }) {
   );
 }
 
-export default MessageArea;
+export default MessageArea; // Export the component for use in other parts of the app

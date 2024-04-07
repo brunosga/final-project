@@ -1,68 +1,73 @@
-/* ChatInterface.css */
 .chat-interface {
-    position: fixed;
-    top: 0;
-    right: 0;
-    width: 300px;
-    height: 100%;
-    background: #FFE8D2;
-    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
-    transform: translateX(100%);
-    transition: transform 0.3s ease-in-out;
-    z-index: 1000;
-  }
-  
-  .chat-interface.visible {
-    transform: translateX(0);
-  }
-  
-  .chat-header {
-    padding: 10px;
-    border-bottom: 1px solid #ff6f00;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
- 
-  .chat-threads {
-    overflow-y: auto;
-  }
-  
-  .chat-thread {
-    display: flex;
-    align-items: center;
-    padding: 10px;
-    border-bottom: 1px solid #ffd3ac;
-    cursor: pointer;
-  }
-  
-  .chat-avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 20px;
-    margin-right: 10px;
-  }
-  
-  .chat-info {
-    flex-grow: 1;
-  }
-  
-  .chat-name {
-    font-weight: bold;
-    text-overflow: ellipsis;
-  }
-  
-  .chat-timestamp {
-    font-size: 0.8em;
-    color: #585858;
-  }
-  
-  .chat-last-message {
-    color: #666;
-  }
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 300px;
+  height: 100%;
+  background: #FFE8D2;
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
+  transform: translateX(100%);
+  transition: transform 0.3s ease-in-out;
+  z-index: 1000;
+}
 
-  .chat-icon {
-    cursor: pointer;
-    font-size: 24px; /* Adjust as needed */
-  }
+.chat-interface.visible {
+  transform: translateX(0);
+}
+
+.chat-header {
+  padding: 10px;
+  background-color: #ff6f00;
+  border-bottom: 1px solid #ffd3ac;
+  display: flex;
+  justify-content: space-between;
+}
+
+.close-button {
+  color: #FFF2EE;
+  cursor: pointer;
+  font-size: 24px;
+  margin-left: 10px;
+}
+
+.chat-threads {
+  overflow-y: auto;
+}
+
+.chat-thread {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #ffd3ac;
+  cursor: pointer;
+}
+
+.chat-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  margin-right: 10px;
+}
+
+.chat-info {
+  flex-grow: 1;
+}
+
+.chat-name {
+  font-weight: bold;
+  text-overflow: ellipsis;
+}
+
+.chat-timestamp {
+  font-size: 0.8em;
+  color: #585858;
+}
+
+.chat-last-message {
+  color: #666;
+}
+
+.chat-icon {
+  cursor: pointer;
+  font-size: 24px;
+}

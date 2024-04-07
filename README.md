@@ -1,8 +1,12 @@
-# Getting Started with Create React App
+# Dining In
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Welcome to Dining In, a platform that connects people with chefs, to bring a fine dining experience at the confort of home.
 
-## Available Scripts
+Developed by: Bruno de Souza Guimarães Almeida, available for download in github.
+NOT HOSTED, it can be functional to the public as soon is hosted.
+Only a few additions to the website to be implemented in a near future.
+
+## How to start the website
 
 In the project directory, you can run:
 
@@ -14,57 +18,43 @@ Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 The page will reload when you make changes.\
 You may also see any lint errors in the console.
 
-### `npm test`
+## Use of the website
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+When lauching the website the user will be at the home page.
+The user can explore the whole website without being logged in.
+By clicking on the side menu you can select "login" to navigate to the login page.
+The user can create and account either as a chef or a regular user.
 
-### `npm run build`
+## Current chefs
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+The website is currently populated with fake chefs for development process and to show how it would look like.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Notes:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+This code was developed By Bruno Almeida with the help of teachers and classmates from the Dorset College, and the use of tools and platforms like:
+`-`[Github](https://github.com)
+`-`[Figma](https://www.figma.com)
+`-`[OpenAi](https://chat.openai.com)
+`-`[Coolors](https://coolors.co)
+`-`[Youtube](https://www.youtube.com)
+`-`[Font Awesome](https://fontawesome.com)
+`-`[Firefoo](https://www.firefoo.app)
+`-`[Stack Overflow](https://stackoverflow.com)
+`-`[w3schools](https://www.w3schools.com/css/css3_animations.asp)
+`-`[Mycolor](https://mycolor.space)
+`-`[Munnelly](https://www.munnelly.com)
+`-`[Lunevedy]´(https://lunevedy.com)
 
-### `npm run eject`
+Each and every part of this software was thought and planned carefully
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+The use of AI(ChatGPT, Github Copilot): OpenAi was for sure of great help during the development of this website - generating specific functions, - helping and giving guidelines to reorganize each component of the code, - re-styling CSS pages and adding new css. - troubleshooting and debugging.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+The fact that most page's components, and functions where pasted into ChatGPT and copied several times, in order to troubleshoot or develop, it is possible that commented lines or AI generated code remains within the project for its functionalities and help to manage.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+For example, some of the comments about the functionalities of the code was generated automatically with help the of `Github Copilot`
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### `About Us Page`
 
-## Learn More
+When developing the About Us page, Bruno Almeida, the creator of the platform, wrote a text telling the story behind the process of how the idea flicked on his mind and what he intened to do with his idea. Before adding the text to the About.js file, he sent the text to ChatGPT to proofread the text and add implementations to the text where he could have made grammar mistakes or if there was a better way to express what Bruno intended to say.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+`Obs.:` The story IS original, but with the AI modifications the text looks more professional and appealing to the user.

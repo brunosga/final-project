@@ -1,0 +1,43 @@
+.about-us-container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 20px;
+  border-radius: 8px;
+  margin-top: 20px;
+  background: #FFF2EE;
+  border: 1px solid #ffd3ac;
+  color: #1f1f1f;
+}
+
+.about-us-container h1 {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.about-us-container h2 {
+  color: #ff6f00;
+}
+
+.about-us-container p {
+  text-align: justify;
+  line-height: 1.6;
+}
+
+.about-us-values {
+  max-width: 900px;
+  margin: auto;
+}
+
+.about-us-container ul {
+  list-style-type: none;
+
+}
+
+.about-us-container li {
+  margin-bottom: 10px;
+  text-align: start;
+}
+
+.about-us-container li strong {
+  color: #ff983d;
+}

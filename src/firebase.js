@@ -1,6 +1,7 @@
+// Import necessary dependencies
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
-import { getAuth } from 'firebase/auth'; // for authentication
+import { getAuth } from 'firebase/auth'; 
 import { getStorage } from 'firebase/storage';
 
 // Web app's Firebase configuration
@@ -14,7 +15,6 @@ const firebaseConfig = {
     measurementId: "G-QXHWDGZGME"
   };
 
- 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);

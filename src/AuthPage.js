@@ -1,4 +1,6 @@
-// AuthPage.js
+// Some parts that are commented in this file is gonna be explained on the final report of the project
+
+// Import necessary dependencies
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getFirestore, doc, setDoc, getDocs, collection} from 'firebase/firestore';
@@ -31,7 +33,6 @@ const AuthPage = () => {
         setIsLogin(!isLogin); // This toggles the state between true and false
         setIsChef(false); // Reset chef toggle when switching forms
         setFormErrors({}); // Clear any form errors
-        // Additionally, you might want to clear form inputs as well
         setEmail('');
         setPassword('');
         setFullName('');
@@ -46,7 +47,6 @@ const AuthPage = () => {
     // Fetch cuisine types from Firestore
     useEffect(() => {
         const fetchCuisines = async () => {
-            // Assuming "cuisines" is the name of your collection
             const querySnapshot = await getDocs(collection(db, "cuisines"));
             const cuisineOptions = [];
             querySnapshot.forEach((doc) => {
@@ -83,14 +83,14 @@ const AuthPage = () => {
                 const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                 const user = userCredential.user;
 
-                // Ensure that selectedCuisines are defined and mapped properly
+                //    Ensure that selectedCuisines are defined and mapped properly
                 //    const selectedCuisineIds = selectedCuisines.map(cuisine => cuisine.id).filter(id => id !== undefined);
 
                 // Create user profile object
                 const chefProfile = {
                     id: user.uid,
                     email: email,
-                    fullName: fullName || '',
+                    name: fullName || '',
                     bio: '',
                     cuisineType: selectedCuisines, // Use the array of selected cuisine IDs
                     chefImage: '',
@@ -119,7 +119,7 @@ const AuthPage = () => {
                     await setDoc(doc(db, "chefs", user.uid), chefProfile);
                     // Redirect to the chef's profile page after a short delay
                     setTimeout(() => {
-                        navigate('/home'); // Modify this URL to your profile page's path
+                        navigate(`/chef/${user.uid}`); 
                     }, 2000);
 
                 } else {
@@ -128,7 +128,7 @@ const AuthPage = () => {
                     await setDoc(doc(db, "users", user.uid), userProfile);
                     // Redirect to the homepage or user's profile page if needed
                     setTimeout(() => {
-                        navigate('/home'); // Modify as needed
+                        navigate('/home'); 
                     }, 2000);
                 }
 
@@ -221,7 +221,6 @@ const AuthPage = () => {
             } else {
                 // User is signed out
                 console.log('User is signed out');
-                // You can handle the logged out state here
             }
         });
 
@@ -365,4 +364,4 @@ const AuthPage = () => {
     );
 };
 
-export default AuthPage;
+export default AuthPage; // Export the component for use in other parts of the app

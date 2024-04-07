@@ -1,5 +1,5 @@
 import { doc, getDoc } from 'firebase/firestore';
-import { db } from '../firebase'; // Adjust the import path as needed
+import { db } from '../firebase';
 import { useState, useEffect } from 'react';
 
 const useCuisinesDetails = (id) => {
@@ -7,6 +7,7 @@ const useCuisinesDetails = (id) => {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState('');
 
+    // useEffect hook to perform the side effect of fetching cuisine details from Firestore
     useEffect(() => {
         const fetchCuisine = async () => {
             if (!id) {
@@ -15,6 +16,7 @@ const useCuisinesDetails = (id) => {
                 return;
             }
 
+            // Indicate that the loading process has started
             setIsLoading(true);
             try {
                 const docRef = doc(db, 'cuisines', id);
@@ -29,7 +31,7 @@ const useCuisinesDetails = (id) => {
                 console.error('Error fetching data:', error);
                 setError(`Error fetching data: ${error.message}`);
             }
-            
+
             setIsLoading(false);
         };
 
@@ -39,4 +41,4 @@ const useCuisinesDetails = (id) => {
     return { cuisine, isLoading, error };
 }
 
-export default useCuisinesDetails;
+export default useCuisinesDetails; // Export the component for use in other parts of the app

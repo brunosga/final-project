@@ -1,3 +1,4 @@
+// Import necessary dependencies
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './App.css';
@@ -23,4 +24,4 @@ const CuisineCard = ({ cuisine }) => {
     
 }
 
-export default CuisineCard;
+export default CuisineCard; // Export the component for use in other parts of the app

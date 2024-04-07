@@ -1,8 +1,9 @@
+// Import necessary dependencies
 import React from 'react';
-import useCuisinesDetail from './hooks/useCuisinesDetails'; // Ensure correct path
+import useCuisinesDetail from './hooks/useCuisinesDetails'; 
 import { useParams, useNavigate } from 'react-router-dom';
 import useChefs from './hooks/useChefs';
-import ChefCard from './ChefCard'; // Make sure you have a ChefCard component
+import ChefCard from './ChefCard'; 
 import './App.css';
 
 const CuisineDetail = () => {
@@ -45,4 +46,4 @@ const CuisineDetail = () => {
     );
 }
 
-export default CuisineDetail;
+export default CuisineDetail; // Export the component for use in other parts of the app
