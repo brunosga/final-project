@@ -45,17 +45,18 @@
 
 button {
   padding: 10px 20px;
-  background-color: #ff6f00; /* Example button color */
+  background-color: #ff6f00;
   color: #FFF2EE; /* Text color for buttons */
   border: none;
   font-weight: bold;
   letter-spacing: 1px;
   border-radius: 5px;
   cursor: pointer;
+  transition: background-color 0.3s ease
 }
 
 button:hover {
-  background-color: #ff983d; /* Darken button on hover */
+  background-color: #ff983d; /* Lighter button on hover */
 }
 
 .cuisine-detail-page{
@@ -63,20 +64,19 @@ button:hover {
 }
 
 .cuisine-banner {
-  /* Styling for the banner */
-  background-color: #ff0000; /* Replace with actual image */
+  background-color: #ff0000;
   padding: 20px;
   text-align: center;
 }
 
 .cuisine-detail .cuisine-header {
   position: relative;
-  margin-bottom: 20px; /* Adjust as needed */
+  margin-bottom: 20px; 
 }
 
 .cuisine-detail .cuisine-image {
   position: relative;
-  height: 300px; /* Adjust as needed */
+  height: 300px; 
   background-size: cover;
   background-position: center;
   display: flex;
@@ -99,14 +99,14 @@ button:hover {
 
 .cuisine-detail .cuisine-title {
   position: absolute;
-  bottom: 10px; /* Adjust as needed */
+  bottom: 10px; 
   left: 50%;
   transform: translateX(-50%);
   background-color: rgba(255, 196, 151, 0.7); /* Semi-transparent background */
-  padding: 5px 15px; /* Adjust as needed */
+  padding: 5px 15px; 
   border-radius: 5px;
-  color: #1f1f1f; /* Adjust text color as needed */
-  font-size: 2.5rem; /* Adjust font size as needed */
+  color: #1f1f1f; 
+  font-size: 2.5rem; 
   text-align: center;
   z-index: 2;
 }
@@ -130,13 +130,6 @@ button:hover {
   color: #1f1f1f;
 }
 
-/* .chef-cards {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 20px;
-} */
-
 .chef-card {
 background-color: #FFE8D2;
 border: 1px solid #ffcca0;
@@ -148,8 +141,8 @@ border-radius: 8px;
 }
 
 .chef-card img {
-  width: 100px; /* Adjust as needed */
-  height: 100px; /* Adjust as needed */
+  width: 100px; 
+  height: 100px;
   border-radius: 50%;
   margin-bottom: 10px;
 }
@@ -188,12 +181,9 @@ border-radius: 8px;
 }
 
 .chef-image {
- /*  width: 80px;
-  height: 80px;
-  border-radius: 50%; */
   display: block;
-  width: 40px; /* Adjust as needed */
-  height: 40px; /* Adjust as needed */
+  width: 40px; 
+  height: 40px; 
   border-radius: 50%; /* Circular image */
   object-fit: cover; /* Cover the image to avoid stretching */
 }
@@ -206,7 +196,7 @@ border-radius: 8px;
 }
 
 .chef-image-container {
-  flex: 0; /* Adjust as needed, or use a fixed width */
+  flex: 0; 
 }
 
 .chef-image-container img {
@@ -222,7 +212,7 @@ border-radius: 8px;
   text-align: center;
   background: #FFE8D2; /* Background for the text */
   position: relative;
-  top: -30px; /* Move up to overlap the image */
+  top: -30px; 
 }
 
 .chef-name {
@@ -290,5 +280,3 @@ border-radius: 8px;
     flex: none; /* Reset any flex sizing to allow default widths */
   }
 }
-
-

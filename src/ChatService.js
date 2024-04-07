@@ -1,6 +1,8 @@
-// ChatService.js
-import { db } from './firebase'; // Import your configured Firestore database instance
-import { collection, addDoc, onSnapshot, query, where, orderBy, Timestamp, doc, getDoc } from 'firebase/firestore';
+// Some parts that are commented in this file is gonna be explained on the final report of the project
+
+// Import necessary dependencies
+import { db } from './firebase';
+import { collection, addDoc, onSnapshot, query, where, orderBy, Timestamp, doc, getDoc, updateDoc } from 'firebase/firestore';
 
 /* // Helper function to get participant details
 async function getParticipantDetails(participantId) {
@@ -26,7 +28,11 @@ export const fetchChatThreads = (userId, callback) => {
   console.log('Fetching chat threads for user:', userId);
 
   const chatsRef = collection(db, 'chats');
-  const q = query(chatsRef, where('participantsIds', 'array-contains', userId));
+  const q = query(
+    chatsRef,
+    where('participantsIds', 'array-contains', userId),
+    orderBy('lastMessageTimestamp', 'desc') // Order by last message timestamp
+  );
 
   const unsubscribe = onSnapshot(q, async querySnapshot => {
     const threads = [];
@@ -90,18 +96,30 @@ export const subscribeToMessages = (chatId, callback) => {
   return unsubscribe;
 };
 
+// Function to send the messages
 export const sendMessage = async (chatId, text, userId, userName, userAvatar) => {
   const messagesRef = collection(db, 'chats', chatId, 'messages');
+  const chatRef = doc(db, 'chats', chatId); // Reference to the chat document
 
   try {
-    await addDoc(messagesRef, {
+    const newMessage = {
       text: text,
       timestamp: Timestamp.now(),
       senderId: userId,
-      senderName: userName, // The user's full name
-      senderAvatar: userAvatar, // The user's avatar or the chef's image as the context dictates
+      senderName: userName,
+      senderAvatar: userAvatar,
       readStatus: false
+    };
+
+    // Add the new message to the 'messages' subcollection
+    await addDoc(messagesRef, newMessage);
+
+    // Update the last message and timestamp in the chat document
+    await updateDoc(chatRef, {
+      lastMessage: text,
+      lastMessageTimestamp: newMessage.timestamp
     });
+
     console.log('Message sent');
   } catch (error) {
     console.error('Error sending message:', error);

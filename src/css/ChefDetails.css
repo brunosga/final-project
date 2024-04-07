@@ -1,302 +1,321 @@
-/* About Chef Section */
 .about-chef {
-    background: #FFE8D2; 
-    padding: 20px;
-    border-radius: 8px;
-  }
-  
-  .about-chef h2 {
-    color: #1f1f1f;
-  }
-  
-  /* Biography Section */
-  .bio {
-    margin-bottom: 2rem;
-  }
-  
-  /* Chef Info Section */
-  .chef-info {
-    flex: 2;
-  }
-  
-  .chef-info h1 {
-    color: #1f1f1f;
-  }
-  
-  .chef-info h2, .chef-info p {
-    margin: 0.5rem 0;
-    color: #1f1f1f;
-  }
-  
-  .chef-profile {
-    display: flex;
-    max-width: 1150px; /* Set the max-width to the size of the square */
-    margin: auto;
-    gap: 30px;
-  }
-  
-  .chef-image-container {
-    flex: 0; /* Adjust as needed, or use a fixed width */
-  }
-  
-  .chef-image-container img {
-    width: 364px;
-    height: 364px;
-    object-fit: cover; 
-    border-radius: 3%; 
-  }
-  
+  background: #FFE8D2;
+  padding: 20px;
+  border-radius: 8px;
+}
 
-  .specialties {
-    max-width: 1150px; /* Set the max-width to the size of the square */
-    margin: auto;
-    background: #ff6f00;
-    padding: 20px;
-    margin-top: 15px;
-    border-radius: 8px;
-    letter-spacing: 1px;
-  }
-  .specialties h2 {
-    color: #FFF2EE;
-  }
-  
-  .star-icon {
-    color: #ffd700; /* Gold color */
-    font-size: 24px; /* Adjust size as needed */
-  }
-  
-  
-  /* Back Button Style */
-  .back-button {
-    margin: 10px;
-    font-size: 1rem;
-    padding: 10px 20px;
-    background-color: #ffd3ac; /* Example button color */
-    color: #000000; /* Text color for buttons */
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-right: 947px;
-  }
-  
-  .back-button:hover {
-    background-color: #FFE8D2; /* Darken button on hover */
-  }
-  
-  /* Slider for Chef Pictures */
-  
-  .slider-container {
-    max-width: 1280px; /* Set the max-width to the size of the square */
-    margin: auto;
-    padding:20px 0; 
-    margin-bottom: 50px;
-  }
-  
-  .slider-container .slick-list {
-    margin: 0 50px; /* Adjust margin to create space between slides */
-  }
-  
-  .slider-container .slick-list,
-  .slider-container .slick-track,
-  .slider-container .slick-slide > div {
-    height: 400px; /* Set the height to the same value to make it a square */
-  }
-  
-  .slider-container .slick-slide img {
-    width: 364px;
-    height: 364px;
-    object-fit: cover; /* This will cover the square area without stretching the image */
-    border-radius: 8px;
-  }
-  
-  .slider-container .slick-slide > div {
-    margin: 0 15px; /* Add left and right margin to each slide for spacing */
-  }
-  
-  /*Style the navigation arrows and dots */
-  .slick-prev,
-  .slick-next {
-    font-size: 0; /* hides default arrow text */
-    line-height: 0;
-    position: absolute;
-    top: 46%;
-    width: 20px;
-    height: 20px;
-    -webkit-transform: translate(0, -50%);
-    -ms-transform: translate(0, -50%);
-    transform: translate(0, -50%);
-    cursor: pointer;
-    background-color: transparent;
-    color: transparent;
-    border: none;
-    outline: none;
-  }
-  
-  .slick-prev {
-    left: -25px;
-    z-index: 1;
-  }
-  
-  .slick-next {
-    right: -25px;
-    z-index: 1;
-  }
-  
-  /* Adding custom icons or text for buttons, if needed */
-  .slick-prev:before,
-  .slick-next:before {
-    font-family: 'slick';
-    font-size: 24px; /* Adjust size as needed */
-    line-height: 1;
-    color: black; /* Adjust color as needed */
-    opacity: 0.75; /* Adjust opacity as needed */
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-  
-  .slick-dots {
-    bottom: -30px; /* Adjust the position of the dots */
-  }
-  
-  .delete-image-button {
-  
-    margin-bottom: 10px;
-  }
-  
-  /* Reviews Section */
-  
-  .review-section, .message-section {
-    max-width: 600px; /* Set the maximum width for the sections */
-    margin: 50px auto; /* Centers the sections */
-    padding: 15px;
-    border: 1px solid #ffcca0;
-    background-color: #FFE8D2;
-    border-radius: 10px; /* Rounds the corners of the cuisine card */
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  }
-  
-  .review-section h2, .message-section h2 {
-    text-align: center;
-    color: #1f1f1f;
-  }
-  
-  .review-list {
-    margin-bottom: 20px;
-  }
-  
-  .review-item {
-    display: flex;
-    margin-bottom: 10px;
-  }
-  
-  .review-avatar {
-    width: 40px; /* Avatar size */
-    height: 40px; /* Avatar size */
-    border-radius: 50%; /* Makes it round */
-    background-color: #ccc; /* Placeholder color */
-    margin-right: 10px;
-  }
-  
-  .review-content {
-    flex: 1;
-  }
-  
-  .review-author {
-    font-weight: bold;
-    margin-bottom: 5px;
-  }
-  
-  .review-comment {
-    margin-bottom: 5px;
-  }
-  
-  .message-section {
-    align-items: center;
-    width: 50%;
-    margin-top: 20px;
-    padding: 15px;
-    border: 1px solid #ffcca0;
-    background-color: #FFE8D2;
-    border-radius: 10px; /* Rounds the corners of the cuisine card */
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  }
-  
-  .message-section textarea {
-    width: 90%;
-    padding: 10px;
-    margin: 10px 0;
-    border-radius: 10px;
-    border: 1px solid #ffd3ac;
-    min-height: 100px; /* Adjust height as needed */
-  }
-  
-  .message-section .send-message {
-    padding: 10px 15px;
-    max-width: 100%;
-    background-color: #ff6f00;
-    color: #FFF2EE;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .success-message {
-    color: green;
-    margin-top: 20px;
-  }
-  /* Utility classes */
+.about-chef h2 {
+  color: #1f1f1f;
+}
 
-/* Additional styles... */
-  
-input[type="text"], textarea {
-    width: 100%;
-    padding: 8px;
-    margin-bottom: 10px;
-    border: 1px solid #ffd3ac;
-    border-radius: 4px; /* Consistency with other inputs */
-  }
-  
-  /* Specific styles for the textarea */
-  textarea {
-    min-height: 225px; /* Adjust the height as needed */
-    max-height: 225px;
-    resize: vertical; /* Allows the user to resize the textarea vertically */
-  }
-  
-  input[type="file"] {
-    margin-bottom: 10px;
-  }
-  
-  .custom-file-upload {
-    display: inline-block;
-    padding: 10px 20px;
-    margin-right: 10px;
-    cursor: pointer;
-    background-color: #ff6f00; /* Light gray background */
-    color: #FFF2EE; /* Dark text */
-    border-radius: 5px; /* Rounded corners */
-    font-family: Arial, sans-serif;
-    font-size: 14px;
-    font-weight: bold;
-    letter-spacing: 1px;
-    text-align: center;
-  }
-  
-  .custom-file-upload:hover {
-    background-color: #ff983d; /* Darker gray on hover */
-  }
-  
-  .save-changes {
-    padding: 10px 20px;
-    background-color: #5cb85c; /* Bootstrap success color */
-    color: #FFF2EE;
-    border: none;
-    border-radius: 5px;
-    font-family: Arial, sans-serif;
-    font-size: 14px;
-    cursor: pointer;
-  }
-  
-  .save-changes:hover {
-    background-color: #4cae4c; /* Darker green on hover */
-  }
+.bio {
+  margin-bottom: 2rem;
+}
+
+.chef-info {
+  flex: 2;
+}
+
+.chef-info h1 {
+  color: #1f1f1f;
+}
+
+.chef-info h2,
+.chef-info p {
+  margin: 0.5rem 0;
+  color: #1f1f1f;
+}
+
+.chef-profile {
+  display: flex;
+  max-width: 1150px;
+  margin: auto;
+  gap: 30px;
+}
+
+.chef-image-container {
+  flex: 0;
+}
+
+.chef-image-container img {
+  width: 364px;
+  height: 364px;
+  object-fit: cover;
+  border-radius: 3%;
+}
+
+
+.specialties {
+  max-width: 1150px;
+  margin: auto;
+  background: #ff6f00;
+  padding: 20px;
+  margin-top: 15px;
+  border-radius: 8px;
+  letter-spacing: 1px;
+}
+
+.specialties h2 {
+  color: #FFF2EE;
+}
+
+/* .chef-detail-header{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 166px 0 155px;
+} */
+
+/* Back Button Style */
+.back-button {
+  margin: 10px;
+  font-size: 1rem;
+  padding: 10px 20px;
+  background-color: #ffd3ac;
+  color: #000000;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-right: 895px;
+}
+
+.back-button:hover {
+  background-color: #FFE8D2;
+}
+
+.edit-profile-button {
+  padding: 10px 20px;
+  background-color: #ff6f00;
+  color: #FFF2EE;
+  border: none;
+  font-weight: bold;
+  letter-spacing: 1px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-right: 10px;
+  transition: background-color 0.3s ease;
+}
+
+
+/* Slider for Chef Pictures */
+
+.slider-container {
+  max-width: 1280px;
+  /* Set the max-width to the size of the square */
+  margin: auto;
+  padding: 20px 0;
+  margin-bottom: 50px;
+}
+
+.slider-container .slick-list {
+  margin: 0 50px;
+}
+
+.slider-container .slick-list,
+.slider-container .slick-track,
+.slider-container .slick-slide>div {
+  height: 400px;
+  /* Set the height to the same value to make it a square */
+}
+
+.slider-container .slick-slide img {
+  width: 364px;
+  height: 364px;
+  object-fit: cover;
+  /* This will cover the square area without stretching the image */
+  border-radius: 8px;
+}
+
+.slider-container .slick-slide>div {
+  margin: 0 15px;
+  /* Add left and right margin to each slide for spacing */
+}
+
+/*Style the navigation arrows and dots */
+.slick-prev,
+.slick-next {
+  font-size: 0;
+  line-height: 0;
+  position: absolute;
+  top: 46%;
+  width: 20px;
+  height: 20px;
+  -webkit-transform: translate(0, -50%);
+  -ms-transform: translate(0, -50%);
+  transform: translate(0, -50%);
+  cursor: pointer;
+  background-color: transparent;
+  color: transparent;
+  border: none;
+  outline: none;
+}
+
+.slick-prev {
+  left: -25px;
+  z-index: 1;
+}
+
+.slick-next {
+  right: -25px;
+  z-index: 1;
+}
+
+.slick-prev:before,
+.slick-next:before {
+  font-family: 'slick';
+  font-size: 24px;
+  line-height: 1;
+  color: black;
+  opacity: 0.75;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.slick-dots {
+  bottom: -30px;
+}
+
+/* Reviews Section */
+
+.review-section,
+.message-section {
+  max-width: 600px;
+  margin: 50px auto;
+  padding: 15px;
+  border: 1px solid #ffcca0;
+  background-color: #FFE8D2;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.review-section h2,
+.message-section h2 {
+  text-align: center;
+  color: #1f1f1f;
+}
+
+.review-list {
+  margin-bottom: 20px;
+}
+
+.review-item {
+  display: flex;
+  margin-bottom: 10px;
+}
+
+.review-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #ccc;
+  margin-right: 10px;
+}
+
+.review-content {
+  flex: 1;
+}
+
+.review-author {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.review-comment {
+  margin-bottom: 5px;
+}
+
+.message-section {
+  align-items: center;
+  width: 50%;
+  margin-top: 20px;
+  padding: 15px;
+  border: 1px solid #ffcca0;
+  background-color: #FFE8D2;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.message-section textarea {
+  width: 90%;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 10px;
+  border: 1px solid #ffd3ac;
+  min-height: 100px;
+}
+
+.message-section .send-message {
+  padding: 10px 20px;
+  background-color: #ff6f00;
+  color: #FFF2EE;
+  border: none;
+  font-weight: bold;
+  letter-spacing: 1px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease
+}
+
+.send-message:hover {
+  background-color: #ff983d;
+}
+
+.success-message {
+  color: green;
+  margin-top: 20px;
+}
+
+/* Specific styles for the textarea */
+
+input[type="text"],
+textarea {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ffd3ac;
+  border-radius: 4px;
+}
+
+textarea {
+  min-height: 225px;
+  max-height: 225px;
+  resize: vertical;
+}
+
+input[type="file"] {
+  margin-bottom: 10px;
+}
+
+.custom-file-upload {
+  display: inline-block;
+  padding: 10px 20px;
+  margin-right: 10px;
+  cursor: pointer;
+  background-color: #ff6f00;
+  color: #FFF2EE;
+  border-radius: 5px;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  text-align: center;
+}
+
+.custom-file-upload:hover {
+  background-color: #ff983d;
+}
+
+.save-changes {
+  padding: 10px 20px;
+  background-color: #5cb85c;
+  color: #FFF2EE;
+  border: none;
+  border-radius: 5px;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.save-changes:hover {
+  background-color: #4cae4c;
+}

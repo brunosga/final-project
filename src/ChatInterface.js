@@ -1,11 +1,13 @@
-// ChatInterface.js
+// Some parts that are commented in this file is gonna be explained on the final report of the project
+
+// Import necessary dependencies
 import React, { useContext, useEffect, useState } from 'react';
 import { ChatContext } from './ChatContext';
 import { fetchChatThreads } from './ChatService';
 import MessageArea from './MessageArea';
-import { useAuthState } from 'react-firebase-hooks/auth'; // Hook from react-firebase-hooks
-import { auth } from './firebase'; // Assuming this is where your Firebase auth object is
-import './css/ChatInterface.css'; // Make sure this path is correct
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from './firebase'; 
+import './css/ChatInterface.css'; 
 
 function ChatInterface() {
   const { isChatVisible, toggleChatVisibility, activeChatId,  setActiveChatId } = useContext(ChatContext);
@@ -15,7 +17,7 @@ function ChatInterface() {
     const [participantDetails, setParticipantDetails] = useState(null);
 
   // Define currentUserId outside of useEffect
- // const currentUserId = 'x8rab3bFXeX2yHvEQxv9LvSEsdp2'; // Replace with actual user ID logic
+ // const currentUserId = 'x8rab3bFXeX2yHvEQxv9LvSEsdp2'; 
 
 // Handle selecting a chat
 const handleSelectChat = (chatId) => {
@@ -60,12 +62,11 @@ const renderChatThreads = () => {
 
   return (
     <div className={`chat-interface ${isChatVisible ? 'visible' : 'hidden'}`}>
-      <header className="chat-header">
-        <span>Messages</span>
-        <button onClick={toggleChatVisibility} className="close-button">
-          X
-        </button>
-      </header>
+      <div className="chat-header">
+        <div onClick={toggleChatVisibility} className="close-button">
+        &times;
+        </div>
+      </div>
       <div className="chat-threads">
         {renderChatThreads()}
       </div>
@@ -78,16 +79,17 @@ const defaultImage = 'https://dl.dropbox.com/scl/fi/rpn385ekm39c8spf7aret/imagem
 
 function ChatThread({ thread, onSelect, participantDetails }) {
   const details = participantDetails[thread.id] || {};
+  const lastMessageDate = thread.lastMessageTimestamp?.toDate();
   return (
     <div className="chat-thread" onClick={() => onSelect(thread.id)}>
       <div className="chat-info">
         <img src={details.image || defaultImage} alt={details.name || 'Unknown User'} className="chat-avatar" />
         <div className="chat-name">{details.name || 'Unknown User'}</div>
         <div className="chat-last-message">{thread.lastMessage || 'No message'}</div>
-        <div className="chat-timestamp">{thread.lastMessageTimestamp?.toDate().toLocaleString()}</div>
+      <div className="chat-timestamp">{lastMessageDate ? lastMessageDate.toLocaleString() : 'No recent activity'}</div>
       </div>
     </div>
   );
 }
 
-export default ChatInterface;
+export default ChatInterface; // Export the component for use in other parts of the app

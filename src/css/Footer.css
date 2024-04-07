@@ -1,124 +1,124 @@
 .footer {
-    background-color: #1f1f1f; /* Adjust the color to match your design */
-    color: #FFF2EE; /* Text color */
-    padding: 1rem 0;
-    font-family: Arial, sans-serif;
-    position: relative;
-    margin-top: 20px;
-    
-  }
-  
-  .footer:before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background-color: #ff6f00;
-  }
+  background-color: #1f1f1f;
+  color: #FFF2EE;
+  padding: 1rem 0;
+  font-family: Arial, sans-serif;
+  position: relative;
+  margin-top: 20px;
+}
 
-  .footer-container {
-    max-width: 1200px; /* Adjust as per your layout width */
-    margin: 0 auto;
-    position: relative; /* For pseudo-element positioning */
-    
-  }
+.footer:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: #ff6f00;
+}
 
-  .logo2 {
-    margin-top: 20px;
-  }
-  
-  .footer h1 {
-    font-size: 2.5em; /* Adjust the size as needed */
-    margin-bottom: 10px;
-  }
-  
-  .footer-links {
-    margin: 20px 0;
-  }
-  
-  .footer-links a {
-    color: #FFF2EE; /* Adjust link color */
-    margin: 0 15px;
-    text-decoration: none;
-    font-size: 1.2em; /* Adjust the size as needed */
-  }
-  .footer-links a:hover {
-    color: #ff6f00; /* Light grey color on hover */
-  }
-  
-  .footer-social {
-    display: flex;
-    justify-content: flex-end; /* Align the social icons to the right */
-    margin-top: 1rem; /* Adjust as needed */
-    margin-right: 15px; /* Add right margin if needed for spacing from the edge of the screen */
-  }
-  
-  .footer-social a {
-    color: #FFF2EE; /* White color for the icons */
-    margin: 0 10px;
-    font-size: 24px; /* Icon size */
-  }
-  
-  .footer-social a:hover {
-    color: #ff6f00; /* Light grey color on hover */
-  }
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+}
 
-  .footer-legal-social {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
+.logo2 {
+  margin-top: 20px;
+  cursor: pointer;
+}
 
-  .footer-legal {
-    position: relative; /* For pseudo-element positioning */
-    text-align: left;
-    flex: 1;
-    font-size: 0.8em;
-    margin-top: 20px; /* Adjust as needed */
-  }
-  
-  .footer-legal:before {
-    content: ''; /* Pseudo-element content should be empty */
-    position: absolute;
-    top: -20px; /* Adjust as needed */
-    left: 60.5%; /* Center the line */
-    transform: translateX(-50%); /* Center the element */
-    width: 125%; /* Adjust the width as needed */
-    height: 1px; /* Height of the red line */
-    background-color: #ff6f00; /* Color of the line */
-  }
-  .footer-legal a {
-    color: #FFF2EE; /* Adjust link color */
-    text-decoration: none;
-  }
+.footer h1 {
+  font-size: 2.5em;
+  margin-bottom: 10px;
+}
 
-  .footer-legal a:hover {
-    color: #ff6f00; /* Light grey color on hover */
-  }
+.footer-links {
+  margin: 20px 0;
+}
 
-  
-  .footer-legal span {
-    margin: 0 5px;
-  }
-  
-  .footer-copywrite {
-    margin-top: 15px;
-    font-size: 0.8em; /* Adjust the size as needed */
-  }
-  
-  /* Add any additional styling as needed */
-  
-  /* Font Awesome icons styles */
- /* .fab {
-    /* If you're using font awesome, add the styles for the icons here */
+.footer-links a {
+  color: #FFF2EE;
+  margin: 0 15px;
+  text-decoration: none;
+  font-size: 1.2em;
+}
 
-  
-  /* Media query for responsiveness */
+.footer-links a:hover {
+  color: #ff6f00;
+}
+
+.footer-social {
+  display: flex;
+  justify-content: flex-end;
+  /* Align the social icons to the right */
+  margin-top: 1rem;
+  margin-right: 15px;
+}
+
+.footer-social a {
+  color: #FFF2EE;
+  margin: 0 10px;
+  font-size: 24px;
+  /* Icon size */
+}
+
+.footer-social a:hover {
+  color: #ff6f00;
+}
+
+.footer-legal-social {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-legal {
+  position: relative;
+  text-align: left;
+  flex: 1;
+  font-size: 0.8em;
+  margin-top: 20px;
+}
+
+.footer-legal:before {
+  content: '';
+  /* Pseudo-element content should be empty */
+  position: absolute;
+  top: -20px;
+  left: 60.5%;
+  /* Center the line */
+  transform: translateX(-50%);
+  /* Center the element */
+  width: 125%;
+  height: 1px;
+  /* Height of the red line */
+  background-color: #ff6f00;
+  /* Color of the line */
+}
+
+.footer-legal a {
+  color: #FFF2EE;
+  text-decoration: none;
+}
+
+.footer-legal a:hover {
+  color: #ff6f00;
+}
+
+.footer-legal span {
+  margin: 0 5px;
+}
+
+.footer-copywrite {
+  margin-top: 15px;
+  font-size: 0.8em;
+}
+
+/* Media query for responsiveness */
 @media (max-width: 768px) {
-    .footer-container {
-      flex-direction: column;
-      text-align: center;
-    }
+  .footer-container {
+    flex-direction: column;
+    text-align: center;
+  }
 }

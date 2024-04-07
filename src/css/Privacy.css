@@ -1,0 +1,48 @@
+.privacy-legal {
+  max-width: 800px;
+  margin: auto;
+  padding: 20px;
+  border-radius: 8px;
+  margin-top: 20px;
+  background: #FFF2EE;
+  border: 1px solid #ffd3ac;
+  color: #1f1f1f;
+}
+
+.privacy-legal h1 {
+  text-align: center;
+  margin-bottom: 1rem;
+  color: #1f1f1f;
+}
+
+.privacy-legal h2 {
+  color: #1f1f1f;
+  margin-top: 2rem;
+  text-align: start;
+
+}
+
+.privacy-legal p {
+  text-align: start;
+  color: #3a3a3a;
+  line-height: 1.6;
+}
+
+.privacy-legal ul {
+  text-align: start;
+  list-style-type: disc;
+  margin-left: 20px;
+}
+
+.privacy-legal li {
+  margin-bottom: 0.5rem;
+}
+
+.fancy-link {
+  color: #0077CC;
+  text-decoration: none;
+}
+
+.fancy-link:hover {
+  text-decoration: underline;
+}

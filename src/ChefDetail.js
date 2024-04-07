@@ -1,3 +1,6 @@
+// Some parts that are commented in this file is gonna be explained on the final report of the project
+
+// Import necessary dependencies
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getChefDetail } from './hooks/useChefsDetails';
@@ -5,14 +8,12 @@ import Slider from "react-slick";
 import { collection, addDoc, doc, updateDoc, getDoc, setDoc, arrayUnion, Timestamp, getDocs, query, where } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage';
 import { onAuthStateChanged } from 'firebase/auth';
-import { db, auth, storage } from './firebase'; // Adjust the path if needed
-import { toast } from 'react-toastify';  // Make sure you install react-toastify if you want to use it for notifications
-import { ToastContainer } from 'react-toastify'; // Import the ToastContainer component
+import { db, auth, storage } from './firebase';
+import { toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import './css/ChefDetails.css';
 import './css/Review.css'
 import 'react-toastify/dist/ReactToastify.css';
-
-
 
 const ChefDetail = () => {
     let { id } = useParams();
@@ -25,9 +26,9 @@ const ChefDetail = () => {
     const [messageText, setMessageText] = useState('');
     const [reviewText, setReviewText] = useState('');
     const [foodRating, setFoodRating] = useState(0);
- //   const [communicationRating, setCommunicationRating] = useState(0);
- //   const [serviceRating, setServiceRating] = useState(0);
-   // const [professionalismRating, setProfessionalismRating] = useState(0);
+    // const [communicationRating, setCommunicationRating] = useState(0);
+    // const [serviceRating, setServiceRating] = useState(0);
+    // const [professionalismRating, setProfessionalismRating] = useState(0);
     const [reviews, setReviews] = useState([]);
     const [slideIndex, setSlideIndex] = useState(0);
     const [hover, setHover] = useState(0);
@@ -47,7 +48,9 @@ const ChefDetail = () => {
     }, [id]);
 
 
+
     useEffect(() => {
+        // Subscribe to authentication state changes
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
             if (user) {
                 // User is signed in
@@ -64,24 +67,25 @@ const ChefDetail = () => {
         return () => unsubscribe(); // Unsubscribe on unmount
     }, [id]);
 
+    // Getting the review data from the database
     useEffect(() => {
         const fetchReviews = async () => {
-          const q = query(collection(db, 'reviews'), where('chefId', '==', id));
-          const querySnapshot = await getDocs(q);
-          const reviewsData = querySnapshot.docs.map((doc) => {
-            // Log the review data to debug
-            console.log(doc.data());
-            return { ...doc.data(), id: doc.id };
-          });
-      
-          setReviews(reviewsData);
-          const averageRating = calculateAverageRating(reviewsData);
-          setAverageRating(averageRating);
+            const q = query(collection(db, 'reviews'), where('chefId', '==', id));
+            const querySnapshot = await getDocs(q);
+            const reviewsData = querySnapshot.docs.map((doc) => {
+                // Log the review data to debug
+                console.log(doc.data());
+                return { ...doc.data(), id: doc.id };
+            });
+
+            setReviews(reviewsData);
+            const averageRating = calculateAverageRating(reviewsData);
+            setAverageRating(averageRating);
         };
-      
+
         fetchReviews();
-      }, [id]);
-      
+    }, [id]);
+
 
     // This function should be called to update the state whenever the reviews array updates
     const calculateAverageRating = (reviews) => {
@@ -92,7 +96,6 @@ const ChefDetail = () => {
         return average.toFixed(1); // Rounds to one decimal and converts to string
     };
 
-    // Add a check to see if the current user can edit the profile
 
     // Slider settings
     const settings = {
@@ -234,13 +237,18 @@ const ChefDetail = () => {
     const handleSendClick = async () => {
         // Prevent sending empty messages
         console.log('Send button clicked');
-        if (!messageText.trim()) return;
+        if (!messageText.trim()) {
+            toast.info('Please enter a message.'); // Inform the user to enter a message if the input is empty
+            return;
+        }
 
         console.log('Attempting to send message:', messageText);
 
         // Get the current user id from the Auth context or Auth state
         const currentUserId = auth.currentUser?.uid;
         if (!currentUserId) {
+            // Display error toast if no user is logged in
+            toast.error('You must be logged in to send a message.');
             console.error('No user is logged in.');
             return;
         }
@@ -278,15 +286,24 @@ const ChefDetail = () => {
             });
         }
 
-        // Add the message to the chat's messages subcollection
-        await addDoc(collection(db, 'chats', chatDocRef.id, 'messages'), {
-            text: messageText,
-            timestamp: Timestamp.now(),
-            senderId: currentUserId,
-            readStatus: false // Assuming you want to track if the message has been read
-        });
+        try {
+            // Add the message to the chat's messages subcollection
+            await addDoc(collection(db, 'chats', chatDocRef.id, 'messages'), {
+                text: messageText,
+                timestamp: Timestamp.now(),
+                senderId: currentUserId,
+                readStatus: false // Assuming you want to track if the message has been read
+            });
 
-        setMessageText('');
+            setMessageText('');
+
+            // Display success toast
+            toast.success("Message sent successfully! Check the chat to see your messages!");
+        } catch (error) {
+            console.error("Error sending message:", error);
+            // Optionally, display an error toast
+            toast.error("Failed to send message. Please try again.");
+        }
     };
 
     // Helper function to get user details
@@ -313,6 +330,11 @@ const ChefDetail = () => {
             return;
         }
 
+        if (isChef) {
+            toast.info("Only regular users can leave a review to the chefs");
+            return;
+        }
+
         // Fetch user details
         const userDetails = await getUserDetails(auth.currentUser.uid);
         console.log(userDetails); // Log to see if userDetails are as expected
@@ -328,43 +350,44 @@ const ChefDetail = () => {
             name: userDetails.fullName, // Assuming 'fullName' is stored in the user document
             profilePicture: userDetails.profilePicture, // Assuming 'profilePicture' is stored in the user document
             foodRating,
-          //  communicationRating,
-           // serviceRating,
-           // professionalismRating,
+            //  communicationRating,
+            // serviceRating,
+            // professionalismRating,
             comment: reviewText,
             date: Timestamp.now(),
         };
 
         try {
 
-            
+
 
             // Push the new review to Firestore
             const docRef = await addDoc(collection(db, "reviews"), review);
             console.log('Review submitted successfully');
             toast.success('Review submitted successfully');
 
-           // Update the local state with the new review
-        setReviews((currentReviews) => {
-            const updatedReviews = [...currentReviews, { ...review, id: docRef.id }];
-            return updatedReviews;
-        });
+            // Update the local state with the new review
+            setReviews((currentReviews) => {
+                const updatedReviews = [...currentReviews, { ...review, id: docRef.id }];
+                return updatedReviews;
+            });
 
-        // Recalculate the average rating based on the updated reviews
-        const updatedReviews = [...reviews, { ...review, id: docRef.id }];
-        const newAverageRating = calculateAverageRating(updatedReviews);
-        setAverageRating(newAverageRating);
+            // Recalculate the average rating based on the updated reviews
+            const updatedReviews = [...reviews, { ...review, id: docRef.id }];
+            const newAverageRating = calculateAverageRating(updatedReviews);
+            setAverageRating(newAverageRating);
 
-        // Resetting the form fields
-        setReviewText('');
-        setFoodRating(0);
-        // ... reset other ratings as needed
-    } catch (error) {
-        console.error('Error submitting review:', error);
-        toast.error('Error submitting review.');
-    }
-};
+            // Resetting the form fields
+            setReviewText('');
+            setFoodRating(0);
+            // ... reset other ratings as needed
+        } catch (error) {
+            console.error('Error submitting review:', error);
+            toast.error('Error submitting review.');
+        }
+    };
 
+    // Slider behaviour
     const reviewSliderSettings = {
         dots: true,
         infinite: true,
@@ -372,6 +395,7 @@ const ChefDetail = () => {
         slidesToShow: 1,
         slidesToScroll: 1,
         vertical: true,
+        arrows: true,
         verticalSwiping: true,
         nextArrow: <UpArrow />,
         prevArrow: <DownArrow />,
@@ -379,25 +403,29 @@ const ChefDetail = () => {
     };
 
     function UpArrow(props) {
-        const { className, style, onClick, currentSlide, slideCount } = props;
+        const { style, onClick, currentSlide, slideCount } = props;
+        if (slideCount <= 1) return null;  // Hide if one or no reviews
         return (
             <div
-                className={`${className} custom-slick-up`} // Renamed class for up arrow
-                style={{ ...style, display: currentSlide === slideCount - 1 ? 'none' : 'block' }} // Hide on last slide
+                style={{ ...style, display: currentSlide === slideCount - 1 ? 'none' : 'block', fontSize: '24px' }} // Hide on last slide
 
                 onClick={onClick}
-            />
+            >
+                &#9660; {/* Unicode upward triangle */}
+
+            </div>
         );
     }
 
     function DownArrow(props) {
-        const { className, style, onClick, currentSlide } = props;
+        const { style, onClick, currentSlide } = props;
         return (
             <div
-                className={`${className} custom-slick-down`} // Renamed class for down arrow
-                style={{ ...style, display: currentSlide === 0 ? 'none' : 'block' }} // Hide on first slide
+                style={{ ...style, display: currentSlide === 0 ? 'none' : 'block', fontSize: '24px' }} // Hide on first slide
                 onClick={onClick}
-            />
+            >
+                &#9650; {/* Unicode downward triangle */}
+            </div>
         );
     }
 
@@ -460,18 +488,10 @@ const ChefDetail = () => {
                     <span key={i} className="star off">&#9733;</span>
                 ))}
                 <span className="average-rating-value">{clampedRating.toFixed(1)}</span>
-                <span className="review-count">{reviewCount} ratings</span> {/* This displays the review count */}
+                <span className="review-count">{reviewCount} {reviewCount === 1 ? 'review' : 'reviews'}</span>
             </div>
         );
     };
-
-
-    // Use the AverageRating component in your render method
-
-    <div className="average-rating-container">
-        <AverageRating rating={averageRating} reviewCount={reviews.length} />
-    </div>
-
 
 
     /* 
@@ -536,150 +556,157 @@ const ChefDetail = () => {
      setMessageText('');
  }; */
 
-    const defaultImage = 'https://dl.dropbox.com/scl/fi/rpn385ekm39c8spf7aret/imagem_2024-03-31_201209793.png?rlkey=bdyv4ryb21d2cvn7ujjdzcdga&'; // Replace with the actual path to your default image
+    // Before component return statement, adjust the settings based on food images availability
+    const adjustedSettings = {
+        ...settings,
+        // Set arrows to false if no images or array is empty
+        arrows: chefDetail.foodImage?.length > 0,
+    };
 
-
+    const defaultImage = 'https://dl.dropbox.com/scl/fi/rpn385ekm39c8spf7aret/imagem_2024-03-31_201209793.png?rlkey=bdyv4ryb21d2cvn7ujjdzcdga&';
+    const defaultFoodImage = 'https://dl.dropbox.com/scl/fi/yq1xrou3e4pbq9jky4mc6/defaultFoodImage.png?rlkey=nzfu3ev5vrw9lof2o494p4x06&'
 
     return (
         <div>
-      <ToastContainer position="bottom-center" />
-        <div className="chef-detail">
-            <button className='back-button' onClick={() => navigate(-1)}>&lt; All chefs</button>
-            {isChef && (
-                <button onClick={() => setIsEditMode(!isEditMode)}>
-                    {isEditMode ? 'View Profile' : 'Edit Profile'}
-                </button>
-            )}
-            <div className="chef-profile">
-                <div className="chef-image-container">
-                    <img src={chefDetail.chefImage || defaultImage} alt={`Chef ${chefDetail.name}`} />
-                </div>
-                <div className="chef-info">
-                    {isEditMode ? (
-                        <>
-                            <input
-                                type="text"
-                                value={chefDetail.name}
-                                onChange={e => setChefDetail({ ...chefDetail, name: e.target.value })}
-                                placeholder="Chef Name"
-                            />
-                            <input
-                                type="text"
-                                value={chefDetail.price}
-                                onChange={e => setChefDetail({ ...chefDetail, price: e.target.value })}
-                                placeholder="Please enter your starting price for your services"
-                            />
-                            <textarea
-                                type="text"
-                                value={chefDetail.bio}
-                                onChange={e => setChefDetail({ ...chefDetail, bio: e.target.value })}
-                                placeholder="About the Chef"
-                            />
-                            <label htmlFor="profile-image-upload" className="custom-file-upload">
-                                Upload Profile Image
-                            </label>
-                            <input
-                                id="profile-image-upload"
-                                type="file"
-                                onChange={handleProfileImageUpload} // Use the new handler
-                                style={{ display: 'none' }} // Hide the default file input
-                            />
-                            <label htmlFor="food-image-upload" className="custom-file-upload">
-                                Upload Your Dishes
-                            </label>
-                            <input
-                                id="food-image-upload"
-                                type="file"
-                                multiple
-                                onChange={handleImageUpload}
-                                style={{ display: 'none' }} // Hide the default file input
-                            />
-
-                            <button className="save-changes" onClick={handleSaveProfile}>Save Changes</button>
-
-                        </>
-                    ) : (
-                        <>
-                            <h1>{chefDetail.name.startsWith("Chef ") ? chefDetail.name : `Chef ${chefDetail.name}`}</h1>
-                            <h2>{chefDetail.cuisine}</h2>
-                            <div className="about-chef">
-                                <h3>About the Chef</h3>
-                                <p>{chefDetail.bio}</p>
-                            </div>
-                        </>
+            <ToastContainer position="bottom-center" />
+            <div className="chef-detail">
+                <div className='chef-detail-header'>
+                    <button className='back-button' onClick={() => navigate(-1)}>&lt; All chefs</button>
+                    {isChef && (
+                        <button className='edit-profile-button' onClick={() => setIsEditMode(!isEditMode)}>
+                            {isEditMode ? 'View Profile' : 'Edit Profile'}
+                        </button>
                     )}
                 </div>
-            </div>
+                <div className="chef-profile">
+                    <div className="chef-image-container">
+                        <img src={chefDetail.chefImage || defaultImage} alt={`Chef ${chefDetail.name}`} />
+                    </div>
+                    <div className="chef-info">
+                        {isEditMode ? (
+                            <>
+                                <input
+                                    type="text"
+                                    value={chefDetail.name}
+                                    onChange={e => setChefDetail({ ...chefDetail, name: e.target.value })}
+                                    placeholder="Chef Name"
+                                />
+                                <input
+                                    type="text"
+                                    value={chefDetail.price}
+                                    onChange={e => setChefDetail({ ...chefDetail, price: e.target.value })}
+                                    placeholder="Please enter your starting price for your services"
+                                />
+                                <textarea
+                                    type="text"
+                                    value={chefDetail.bio}
+                                    onChange={e => setChefDetail({ ...chefDetail, bio: e.target.value })}
+                                    placeholder="About the Chef"
+                                />
+                                <label htmlFor="profile-image-upload" className="custom-file-upload">
+                                    Upload Profile Image
+                                </label>
+                                <input
+                                    id="profile-image-upload"
+                                    type="file"
+                                    onChange={handleProfileImageUpload} // Use the new handler
+                                    style={{ display: 'none' }} // Hide the default file input
+                                />
+                                <label htmlFor="food-image-upload" className="custom-file-upload">
+                                    Upload Your Dishes
+                                </label>
+                                <input
+                                    id="food-image-upload"
+                                    type="file"
+                                    multiple
+                                    onChange={handleImageUpload}
+                                    style={{ display: 'none' }} // Hide the default file input
+                                />
 
-            <div className="specialties">
-                <h2>Specialties</h2>
-            </div>
+                                <button className="save-changes" onClick={handleSaveProfile}>Save Changes</button>
 
-
-            <div className="slider-container">
-                <Slider {...settings}>
-                    {chefDetail.foodImage?.map((image, index) => (
-                        <div key={index} className="chef-food-image">
-                            <img src={image} alt={`Food ${index + 1}`} />
-                            {isEditMode && (
-                                <button onClick={() => handleDeleteImage(image)} className="delete-image-button">
-                                    Delete
-                                </button>
-                            )}
-                        </div>
-                    ))}
-                </Slider>
-            </div>
-            <div className="review-section">
-                <h2>Reviews</h2>
-
-
-                {/* Review Form */}
-                <div className="average-rating-container">
-                    <h2>Average Rating</h2>
-                    <AverageRating rating={averageRating} />
+                            </>
+                        ) : (
+                            <>
+                                <h1>{chefDetail.name.startsWith("Chef ") ? chefDetail.name : `Chef ${chefDetail.name}`}</h1>
+                                <h2>{chefDetail.cuisine}</h2>
+                                <div className="about-chef">
+                                    <h3>About the Chef</h3>
+                                    <p>{chefDetail.bio}</p>
+                                </div>
+                            </>
+                        )}
+                    </div>
                 </div>
 
-                <div className="review-list">
-                    <Slider {...reviewSliderSettings}
-                        slideCount={reviews.length}
-                        currentSlide={slideIndex}>
-                        {reviews.map((review, index) => (
-  <div className="review-item" key={index}>
-    <div className="review-avatar">
-      <img src={review.profilePicture || defaultImage} alt={review.name || 'User'} />
-    </div>
-    <div className="review-content">
-      <p className="review-author">{review.name || 'Anonymous'}</p>
-      {/* Check if review.date exists and is a Firestore Timestamp */}
-      <p className="review-date">{review.date?.toDate ? review.date.toDate().toDateString() : 'Unknown date'}</p>
-      <p className="review-comment">{review.comment}</p>
-      <div className="review-rating"><ReadOnlyStars rating={review.foodRating} /></div>
-    </div>
-  </div>
-))}
+                <div className="specialties">
+                    <h2>Specialties</h2>
+                </div>
+
+
+                <div className="slider-container">
+                    <Slider {...adjustedSettings}>
+                        {chefDetail.foodImage?.map((image, index) => (
+                            <div key={index} className="chef-food-image">
+                                <img src={image || defaultFoodImage} alt={`Food ${index + 1}`} />
+                                {isEditMode && (
+                                    <button onClick={() => handleDeleteImage(image)} className="delete-image-button">
+                                        Delete
+                                    </button>
+                                )}
+                            </div>
+                        ))}
                     </Slider>
                 </div>
-                <form className="review-form" onSubmit={submitReview}>
-                    <h3>Leave a Review</h3>
-                    <textarea
-                        className="input-edit"
-                        value={reviewText}
-                        onChange={(e) => setReviewText(e.target.value)}
-                        placeholder="Your review"
-                    />
-                    {/* Rating Inputs */}
-                    <div className="rating-input">
-                        <StarRating rating={foodRating} setRating={setFoodRating} />
+                <div className="review-section">
+                    <h2>Reviews</h2>
 
-                        {/*  <input
+
+
+                    <div className="average-rating-container">
+                        <AverageRating rating={averageRating} reviewCount={reviews.length} />
+                    </div>
+
+                    <div className="review-list">
+                        <Slider {...reviewSliderSettings}
+                            slideCount={reviews.length}
+                            currentSlide={slideIndex}>
+                            {reviews.map((review, index) => (
+                                <div className="review-item" key={index}>
+                                    <div className="review-avatar">
+                                        <img src={review.profilePicture || defaultImage} alt={review.name || 'User'} />
+                                    </div>
+                                    <div className="review-content">
+                                        <p className="review-author">{review.name || 'Anonymous'}</p>
+                                        {/* Check if review.date exists and is a Firestore Timestamp */}
+                                        <p className="review-date">{review.date?.toDate ? review.date.toDate().toDateString() : 'Unknown date'}</p>
+                                        <p className="review-comment">{review.comment}</p>
+                                        <div className="review-rating"><ReadOnlyStars rating={review.foodRating} /></div>
+                                    </div>
+                                </div>
+                            ))}
+                        </Slider>
+                    </div>
+                    <form className="review-form" onSubmit={submitReview}>
+                        <h4>If you had a culinary experience with this chef leave a review!</h4>
+                        <textarea
+                            className="input-edit"
+                            value={reviewText}
+                            onChange={(e) => setReviewText(e.target.value)}
+                            placeholder="Your review"
+                        />
+                        {/* Rating Inputs */}
+                        <div className="rating-input">
+                            <StarRating rating={foodRating} setRating={setFoodRating} />
+
+                            {/*  <input
                             className="input-edit"
                             type="number"
                             value={foodRating}
                             onChange={(e) => setFoodRating(e.target.value)}
                             placeholder="Food rating"
                         />*/}
-                        {/* Repeat for other ratings 
+                            {/* Repeat for other ratings 
                         <input
                             className="input-edit"
                             type="number"
@@ -701,28 +728,28 @@ const ChefDetail = () => {
                             onChange={(e) => setProfessionalismRating(e.target.value)}
                             placeholder="Professionalism rating"
                         />*/}
-                    </div>
-                    <button className="button-edit" type="submit">Submit Review</button>
-                </form>
+                        </div>
+                        <button className="button-edit" onClick={submitReview}>Submit Review</button>
+                    </form>
 
+                </div>
+
+
+                {/* Message Section */}
+                <div className="message-section">
+                    <h2>Get in touch with the chef</h2>
+                    <textarea
+                        id="messageText" // Adding an id
+                        name="messageText" // Adding a name
+                        placeholder="Leave a message for the chef"
+                        value={messageText} // Controlled component
+                        onChange={(e) => setMessageText(e.target.value)} // Update state on change
+                    ></textarea>
+                    <button className="send-message" onClick={handleSendClick}>Send Message</button>
+                </div>
             </div>
-
-
-            {/* Message Section */}
-            <div className="message-section">
-                <h2>Get in touch with the chef</h2>
-                <textarea
-                    id="messageText" // Adding an id
-                    name="messageText" // Adding a name
-                    placeholder="Leave a message for the chef"
-                    value={messageText} // Controlled component
-                    onChange={(e) => setMessageText(e.target.value)} // Update state on change
-                ></textarea>
-                <button className="send-message" onClick={handleSendClick}>Send message</button>
-            </div>
-        </div>
         </div>
     );
 }
 
-export default ChefDetail;
+export default ChefDetail; // Export the component for use in other parts of the app

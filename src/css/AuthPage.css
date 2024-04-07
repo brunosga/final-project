@@ -1,184 +1,182 @@
-
-/* Auth Page Section*/
-
 .auth-container {
-    min-height: 70vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #ffd3ac;
-  }
-  
-  .auth-box {
-    background: #FFE8D2;
-    padding: 24px;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    width: 350px;
-  }
-  
-  .auth-header {
-    color: #1f1f1f;
-    text-align: center;
-    margin-bottom: 20px;
-  }
-  
-  .auth-toggle {
-    display: flex;
-    justify-content: space-around;
-    margin-bottom: 20px;
-  }
-  
-  .auth-toggle button {
-    padding: 8px 16px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    background-color: #ff983d;
-  }
-  
-  .auth-toggle button.active {
-    background-color: #ff6f00;
-    color: white;
-  }
-  
-  .auth-form {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .auth-form input {
-    padding: 8px;
-    margin-bottom: 10px;
-    border: 1px solid #ffd3ac;
-    border-radius: 4px;
-  }
-  
- 
-  .auth-form button {
-    padding: 10px;
-    border: none;
-    border-radius: 4px;
-    background-color: #ff6f00;
-    color: white;
-    cursor: pointer;
-  }
-  
-  .auth-form .checkbox-container {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-  }
-  
-  .auth-form .checkbox-container input {
-    margin-right: 10px;
-  }
-  
-  /* Hide the default checkbox */
-  .custom-checkbox-input {
-    display: none;
-  }
-  
-  .custom-checkbox {
-    display: flex;
-    align-items: center;
-    border: 1px solid #ff983d;
-    margin-bottom: 8px;
-    margin-top: 8px;
-    padding: 5px;
-    border-radius: 4px; /* Rounded corners */
-  }
-  
-  /* Custom styled checkbox */
-  .custom-checkbox-label {
-    display: block;
-    position: relative;
-    padding-left: 35px;
-    margin-bottom: 6px;
-    cursor: pointer;
-    font-size: 16px;
-    user-select: none;
-  }
-  
-  
-  /* Create a custom box */
-  .custom-checkbox-label:before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 25px;
-    height: 25px;
-    background-color: white;
-    border: 1px solid #ff983d;
-    border-radius: 4px;
-  }
-  
-  
-  /* When the checkbox is checked, add a blue background */
-  .custom-checkbox-input:checked + .custom-checkbox-label:before {
-    background-color: #75f100;
+  min-height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ffd3ac;
+}
 
-  }
-  
-  /* Create the checkmark/indicator (hidden when not checked) */
-  .custom-checkbox-label:after {
-    content: '';
-    position: absolute;
-    display: none;
-    left: 9px;
-    top: 5px;
-    width: 8px;
-    height: 15px;
-    border: solid white;
-    border-width: 0 3px 3px 0;
-    transform: rotate(45deg);
-  }
-  
-  /* Show the checkmark when checked */
-  .custom-checkbox-input:checked + .custom-checkbox-label:after {
-    display: block;
-  }
-  
-  /* Style the label text */
-  .custom-checkbox-label {
-    color: #333; /* Text color */
-  }
-  
-  /* Customize the focus style */
-  .custom-checkbox-input:focus + .custom-checkbox-label:before {
-    box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.5);
-  }
-  
-  .error-message {
-    color: red;
-    font-size: 14px;
-  }
-  
-  .error-message-container {
-    border: 1px solid #ff6a60;
-    background-color: #ffe6e6;
-    color: #ff6a60;
-    text-align: center;
-    padding: 10px;
-    margin-top: 10px;
-    margin-bottom: 20px;
-    border-radius: 5px;
-    font-size: 14px;
-  }
-  
-  .error-title {
-    font-weight: bold;
-  }
-  
-  .forgot-password {
-    color: #d30000; /* The color you want for the link */
-    text-align: center;
-    margin-top: 10px;
-    cursor: pointer;
-  }
-  
-  .forgot-password:hover {
-    text-decoration: underline;
-  }
-  
+.auth-box {
+  background: #FFE8D2;
+  padding: 24px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 350px;
+}
+
+.auth-header {
+  color: #1f1f1f;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.auth-toggle {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+}
+
+.auth-toggle button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: #ff983d;
+}
+
+.auth-toggle button.active {
+  background-color: #ff6f00;
+  color: white;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.auth-form input {
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ffd3ac;
+  border-radius: 4px;
+}
+
+
+.auth-form button {
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  background-color: #ff6f00;
+  color: white;
+  cursor: pointer;
+}
+
+.auth-form .checkbox-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.auth-form .checkbox-container input {
+  margin-right: 10px;
+}
+
+/* Hide the default checkbox */
+.custom-checkbox-input {
+  display: none;
+}
+
+.custom-checkbox {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ff983d;
+  margin-bottom: 8px;
+  margin-top: 8px;
+  padding: 5px;
+  border-radius: 4px;
+  /* Rounded corners */
+}
+
+/* Custom styled checkbox */
+.custom-checkbox-label {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  user-select: none;
+}
+
+
+/* Create a custom box */
+.custom-checkbox-label:before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 25px;
+  height: 25px;
+  background-color: white;
+  border: 1px solid #ff983d;
+  border-radius: 4px;
+}
+
+
+/* When the checkbox is checked, add a green background */
+.custom-checkbox-input:checked+.custom-checkbox-label:before {
+  background-color: #75f100;
+
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.custom-checkbox-label:after {
+  content: '';
+  position: absolute;
+  display: none;
+  left: 9px;
+  top: 5px;
+  width: 8px;
+  height: 15px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
+}
+
+/* Show the checkmark when checked */
+.custom-checkbox-input:checked+.custom-checkbox-label:after {
+  display: block;
+}
+
+/* Style the label text */
+.custom-checkbox-label {
+  color: #333;
+  /* Text color */
+}
+
+/* Customize the focus style */
+.custom-checkbox-input:focus+.custom-checkbox-label:before {
+  box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.5);
+}
+
+.error-message {
+  color: red;
+  font-size: 14px;
+}
+
+.error-message-container {
+  border: 1px solid #ff6a60;
+  background-color: #ffe6e6;
+  color: #ff6a60;
+  text-align: center;
+  padding: 10px;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.error-title {
+  font-weight: bold;
+}
+
+.forgot-password {
+  color: #d30000;
+  text-align: center;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+.forgot-password:hover {
+  text-decoration: underline;
+}

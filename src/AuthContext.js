@@ -1,8 +1,8 @@
-// AuthContext.js
+// Import necessary dependencies
 import React, { createContext, useState, useEffect } from 'react';
 import { auth } from './firebase';
 import { signOut, onAuthStateChanged } from 'firebase/auth';
-import { db } from './firebase'; // Ensure this import is correct
+import { db } from './firebase';
 import { doc, getDoc } from 'firebase/firestore';
 
 const AuthContext = createContext({});
@@ -11,7 +11,8 @@ export const AuthProvider = ({ children }) => {
     const [userRole, setUserRole] = useState(''); // Added state for user role
     const [userId, setUserId] = useState(''); // Added state for user ID
 
-      useEffect(() => {
+    // Effect hook to monitor authentication state changes
+    useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
             if (user) {
                 setIsLoggedIn(true);
@@ -32,6 +33,7 @@ export const AuthProvider = ({ children }) => {
         return () => unsubscribe();
     }, []);
 
+    // Function to handle logout
     const handleLogout = async () => {
         try {
             await signOut(auth);
@@ -50,4 +52,4 @@ export const AuthProvider = ({ children }) => {
     );
 };
 
-export const useAuth = () => React.useContext(AuthContext);
+export const useAuth = () => React.useContext(AuthContext); // Custom hook to use the auth context
