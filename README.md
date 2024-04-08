@@ -25,7 +25,7 @@ The user can explore the whole website without being logged in.
 By clicking on the side menu you can select "login" to navigate to the login page.
 The user can create and account either as a chef or a regular user.
 
-## `Users credentials for testing`
+### `Users credentials for testing`
 
 `Chef credentials`-email: chef1@gmail.com, password: 123456 | email: chef2@gmail.com, password: 123456 | email: chef4@gmail.com, password: 123456 | email: chef5@gmail.com, password: 123456 | email: chef6@gmail.com, password: 123456 | email: chef8@gmail.com, password: 123456 |
 
