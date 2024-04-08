@@ -18,13 +18,16 @@
 
 .chef-info h1 {
   color: #1f1f1f;
+  
 }
 
-.chef-info h2,
-.chef-info p {
-  margin: 0.5rem 0;
+.chef-bio {
+  white-space: pre-wrap; /* CSS property to maintain spacing and line breaks */
   color: #1f1f1f;
+  text-align: left;
+  font-family: 'arial';
 }
+
 
 .chef-profile {
   display: flex;

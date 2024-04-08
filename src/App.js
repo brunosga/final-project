@@ -29,7 +29,7 @@ const App = () => {
     <Router>
       <AuthProvider>
         <ChatProvider>
-          <div className="App">
+        <div data-testid="app-container" className="App">
             {/* Header component with menu toggle function */}
             <Header toggleMenu={toggleMenu} />
             {/* Menu component with close function, only displayed if menuOpen is true */}
