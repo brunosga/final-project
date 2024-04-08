@@ -4,6 +4,7 @@ import { auth, db, storage } from './firebase';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'; 
 import { doc, updateDoc, getDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom'; 
+import { toast } from 'react-toastify'; // Import toast from react-toastify
 import './css/Profile.css'; 
 
 // Profile component for editing and updating user profile
@@ -45,6 +46,7 @@ const Profile = () => {
     const userRef = doc(db, "users", auth.currentUser.uid); // Reference to the user's Firestore document
     let url = profilePicture; // Default to the current profile picture
 
+    try {
     if (file) {
       // If a new file is selected, upload it to Firebase Storage
       const fileRef = ref(storage, `profilePictures/${auth.currentUser.uid}/${file.name}`);
@@ -58,10 +60,13 @@ const Profile = () => {
       profilePicture: url,
     });
 
-    setProfilePicture(url); // Update state with the new profile picture URL
-    alert('Profile updated successfully!'); // Inform the user of successful update
-  };
-
+    setProfilePicture(url);
+    toast.success('Profile updated successfully!'); // Display success toast message
+  } catch (error) {
+    console.error("Error updating profile: ", error);
+    toast.error('Failed to update profile.'); // Display error toast message
+  }
+};
   // Default image URL in case no profile picture is set
   const defaultImage = 'https://dl.dropbox.com/scl/fi/rpn385ekm39c8spf7aret/imagem_2024-03-31_201209793.png?rlkey=bdyv4ryb21d2cvn7ujjdzcdga&';
 

@@ -46,18 +46,23 @@ useEffect(() => {
 
 // Ensure chat threads exist before rendering them
 const renderChatThreads = () => {
-  return chatThreads.length > 0 ? (
-    chatThreads.map((thread) => (
+  if (chatThreads.length > 0) {
+    return chatThreads.map((thread) => (
       <ChatThread
         key={thread.id}
         thread={thread}
         onSelect={handleSelectChat}
         participantDetails={participantDetails} // Pass participantDetails as a prop
       />
-    ))
-  ) : (
-    <div className="chat-interface">No chat threads available</div>
-  );
+    ));
+  } else {
+    // Display a message when there are no chat messages
+    return (
+      <div className="no-chat-threads">
+        You don't have any messages.
+      </div>
+    );
+  }
 };
 
   return (
