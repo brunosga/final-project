@@ -128,7 +128,7 @@ const AuthPage = () => {
                     await setDoc(doc(db, "users", user.uid), userProfile);
                     // Redirect to the homepage or user's profile page if needed
                     setTimeout(() => {
-                        navigate('/home'); 
+                        navigate('/profile'); 
                     }, 2000);
                 }
 

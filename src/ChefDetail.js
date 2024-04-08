@@ -348,7 +348,7 @@ const ChefDetail = () => {
             chefId: id, // ID from the useParams hook
             userId: auth.currentUser.uid,
             name: userDetails.fullName, // Assuming 'fullName' is stored in the user document
-            profilePicture: userDetails.profilePicture, // Assuming 'profilePicture' is stored in the user document
+            profilePicture: userDetails.profilePicture|| 'defaultImage', // Assuming 'profilePicture' is stored in the user document
             foodRating,
             //  communicationRating,
             // serviceRating,
@@ -661,8 +661,6 @@ const ChefDetail = () => {
                 <div className="review-section">
                     <h2>Reviews</h2>
 
-
-
                     <div className="average-rating-container">
                         <AverageRating rating={averageRating} reviewCount={reviews.length} />
                     </div>
@@ -733,7 +731,6 @@ const ChefDetail = () => {
                     </form>
 
                 </div>
-
 
                 {/* Message Section */}
                 <div className="message-section">

@@ -15,6 +15,7 @@ import PasswordReset from './PasswordReset';
 import Cookies from './Cookies';
 import About from './About';
 import Privacy from './Privacy';
+import { ToastContainer } from 'react-toastify';
 import './App.css';
 import './css/Header.css';
 import Footer from './Footer';
@@ -27,6 +28,7 @@ const App = () => {
   const closeMenu = () => setMenuOpen(false);
   return (
     <Router>
+            <ToastContainer />
       <AuthProvider>
         <ChatProvider>
         <div data-testid="app-container" className="App">
