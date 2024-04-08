@@ -632,7 +632,7 @@ const ChefDetail = () => {
                                 <h2>{chefDetail.cuisine}</h2>
                                 <div className="about-chef">
                                     <h3>About the Chef</h3>
-                                    <p>{chefDetail.bio}</p>
+                                    <pre className="chef-bio">{chefDetail.bio}</pre> {/* Use <pre> tag for preserving whitespace and line breaks */}
                                 </div>
                             </>
                         )}

@@ -9,7 +9,7 @@ const About = () => {
           <section className="about-us-story">
             <h2>Our Story</h2>
             <p>
-              It all began with a light-hearted conversation about the luxury of having a Michelin-starred chef prepare a meal in the comfort of our own home. That whimsical idea sparked a realization: Why not make it a reality? Our founder, inspired by this dream, embarked on a mission to bring gourmet experiences to your dining table.
+              It all began wition: Why not make it a reality? Our founder, inspired by this dream, embarked on a mission to bring gourmet experiences to your dining table.
             </p>
             <p>
               Starting as a personal chef for his friends, our journey was met with enthusiasm and delight, igniting the concept of Dining In. Today, we are proud to present a platform where food enthusiasts can discover chefs of varied specialties, inviting you to a world where flavors know no bounds and dining becomes an adventure within your own walls.
