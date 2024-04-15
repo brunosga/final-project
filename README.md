@@ -33,7 +33,7 @@ The user can create and account either as a chef or a regular user.
 
 `Chef credentials`-email: chef1@gmail.com, password: 123456 | email: chef2@gmail.com, password: 123456 | email: chef4@gmail.com, password: 123456 | email: chef5@gmail.com, password: 123456 | email: chef6@gmail.com, password: 123456 | email: chef8@gmail.com, password: 123456 |
 
-`User credentials`--email: user1@gmail.com, password: 123456 | -email: user2@gmail.com, password: 123456 | 
+`User credentials`-email: user1@gmail.com, password: 123456 | -email: user2@gmail.com, password: 123456 | 
 
 ## Current chefs
 
