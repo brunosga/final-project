@@ -42,7 +42,7 @@ const App = () => {
               {/* Define application routes and components associated with each path */}
               <Routes>
                 
-                <Route path="/" element={<Cuisine />} />
+                <Route path="/home" element={<Cuisine />} />
                 <Route path="/cuisine/:id" element={<CuisineDetail id={params.id} />} />
                 <Route path="/chef/:id" element={<ChefDetail />} />
                 <Route path="/login/" element={<AuthPage />} />
