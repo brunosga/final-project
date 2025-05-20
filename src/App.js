@@ -1,6 +1,6 @@
 // Import necessary dependencies and components
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route} from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import Header from './Header';
 import Menu from './Menu';
@@ -42,7 +42,8 @@ const App = () => {
               {/* Define application routes and components associated with each path */}
               <Routes>
                 
-                <Route path="/" element={<Cuisine />} />
+                <Route path="/" element={<Navigate to="/home" />} />
+                <Route path="/home" element={<Cuisine />} />
                 <Route path="/cuisine/:id" element={<CuisineDetail id={params.id} />} />
                 <Route path="/chef/:id" element={<ChefDetail />} />
                 <Route path="/login/" element={<AuthPage />} />
