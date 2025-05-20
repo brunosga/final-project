@@ -1,6 +1,6 @@
 // Import necessary dependencies and components
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, BrowserRouter } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import Header from './Header';
 import Menu from './Menu';
@@ -37,10 +37,12 @@ const App = () => {
             {/* Menu component with close function, only displayed if menuOpen is true */}
             {menuOpen && <Menu closeMenu={closeMenu} />}
             <main>
-            <BrowserRouter basename="/final-project"> 
+     
+            
               {/* Define application routes and components associated with each path */}
               <Routes>
-                <Route path="/home/" element={<Cuisine />} />
+                
+                <Route path="/" element={<Cuisine />} />
                 <Route path="/cuisine/:id" element={<CuisineDetail id={params.id} />} />
                 <Route path="/chef/:id" element={<ChefDetail />} />
                 <Route path="/login/" element={<AuthPage />} />
@@ -49,7 +51,7 @@ const App = () => {
                 <Route path="/about" element={<About />} />
                 <Route path="/privacy" element={<Privacy />} />
               </Routes>
-              </BrowserRouter>
+             
             </main>
             <Footer />
             <Cookies />
