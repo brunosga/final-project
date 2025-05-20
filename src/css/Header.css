@@ -134,6 +134,7 @@
       border-bottom: 1px solid #ffd3ac;
       text-decoration: none;
       color: #1f1f1f;
+      cursor: pointer;
   }
 
   .my-profile:hover {

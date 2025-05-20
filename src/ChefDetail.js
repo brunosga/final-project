@@ -350,17 +350,11 @@ const ChefDetail = () => {
             name: userDetails.fullName, // Assuming 'fullName' is stored in the user document
             profilePicture: userDetails.profilePicture|| 'defaultImage', // Assuming 'profilePicture' is stored in the user document
             foodRating,
-            //  communicationRating,
-            // serviceRating,
-            // professionalismRating,
             comment: reviewText,
             date: Timestamp.now(),
         };
 
         try {
-
-
-
             // Push the new review to Firestore
             const docRef = await addDoc(collection(db, "reviews"), review);
             console.log('Review submitted successfully');
@@ -380,7 +374,6 @@ const ChefDetail = () => {
             // Resetting the form fields
             setReviewText('');
             setFoodRating(0);
-            // ... reset other ratings as needed
         } catch (error) {
             console.error('Error submitting review:', error);
             toast.error('Error submitting review.');
